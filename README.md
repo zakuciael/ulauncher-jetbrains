@@ -2,6 +2,7 @@
 
 [![Build Status](https://img.shields.io/travis/com/brpaz/ulauncher-jetbrains.svg)](https://github.com/brpaz/ulauncher-jetbrains)
 [![GitHub license](https://img.shields.io/github/license/brpaz/ulauncher-jetbrains.svg)](https://github.com/brpaz/ulauncher-jetbrains/blob/master/LICENSE)
+[![Ulauncher Extension](<[https://img.shields.io/github/license/brpaz/ulauncher-jetbrains.svg]([https://img.shields.io/badge/ulauncher-extension-green.svg](https://img.shields.io/badge/ulauncher-extension-green.svg))>)](https://ext.ulauncher.io/-/github-brpaz-ulauncher-jetbrains)
 
 > Open your recent projects from Jetbrains IDEs from Ulauncher
 
