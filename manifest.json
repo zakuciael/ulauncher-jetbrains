@@ -1,0 +1,53 @@
+{
+  "manifest_version": "2",
+  "api_version": "1",
+  "name": "jetbrains",
+  "description": "Open your recent projects from Jetbrains IDEs",
+  "developer_name": "Bruno Paz",
+  "icon": "images/icon.png",
+  "options": {
+    "query_debounce": 0.1
+  },
+  "preferences": [
+    {
+      "id": "pstorm_keyword",
+      "type": "keyword",
+      "name": "PHPStorm | Open Recent",
+      "default_value": "pstorm"
+    },
+    {
+      "id": "pstorm_projects_file",
+      "type": "input",
+      "name": "Open Project in PHPStorm",
+      "description": "The path to the location of the recent files in PHPstorm",
+      "default_value": "~/.PhpStorm2018.1/config/options/recentProjectDirectories.xml"
+    },
+    {
+      "id": "pstorm_launch_script",
+      "type": "input",
+      "name": "PHPStorm launcher script path",
+      "description": "The location of the PHPStorm launch script file",
+      "default_value": "/usr/local/bin/pstorm"
+    },
+    {
+      "id": "webstorm_keyword",
+      "type": "keyword",
+      "name": "Webstorm | Open Recent",
+      "default_value": "webstorm"
+    },
+    {
+      "id": "webstorm_projects_file",
+      "type": "input",
+      "name": "Webstorm recent projects file",
+      "description": "The path to the location of the recent files in Webstorm",
+      "default_value": "~/.Webstorm2018.1/config/options/recentProjectDirectories.xml"
+    },
+    {
+      "id": "webstorm_launch_script",
+      "type": "input",
+      "name": "Webstorm launcher script path",
+      "description": "The location of the Webstorm launch script file",
+      "default_value": "/usr/local/bin/webstorm"
+    }
+  ]
+}
