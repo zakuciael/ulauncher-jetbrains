@@ -48,6 +48,26 @@
       "name": "Webstorm launcher script path",
       "description": "The location of the Webstorm launch script file",
       "default_value": "/usr/local/bin/webstorm"
+    },
+    {
+      "id": "pycharm_keyword",
+      "type": "keyword",
+      "name": "PyCharm | Open Recent",
+      "default_value": "pycharm"
+    },
+    {
+      "id": "pycharm_projects_file",
+      "type": "input",
+      "name": "Open Project in PyCharm",
+      "description": "The path to the location of the recent files in PyCharm",
+      "default_value": "~/.PyCharm2018.1/config/options/recentProjectDirectories.xml"
+    },
+    {
+      "id": "pycharm_launch_script",
+      "type": "input",
+      "name": "PyCharm launcher script path",
+      "description": "The location of the PyCharm launch script file",
+      "default_value": "/usr/local/bin/pycharm"
     }
   ]
 }
