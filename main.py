@@ -28,7 +28,7 @@ class JetbrainsLauncherExtension(Extension):
         self.subscribe(KeywordQueryEvent, KeywordQueryEventListener())
 
     def get_recent_projects_file_path(self, keyword):
-        if keyword in ['pstorm', 'webstorm']:
+        if keyword in ['pstorm', 'webstorm', 'pycharm']:
             return os.path.expanduser(self.preferences.get("%s_projects_file" % keyword))
 
         raise AttributeError("Invalid keyword detected")
