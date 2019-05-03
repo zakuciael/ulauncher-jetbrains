@@ -68,6 +68,26 @@
       "name": "PyCharm launcher script path",
       "description": "The location of the PyCharm launch script file",
       "default_value": "/usr/local/bin/pycharm"
+    },
+    {
+      "id": "intellij_keyword",
+      "type": "keyword",
+      "name": "IntelliJ | Open Recent",
+      "default_value": "intellij"
+    },
+    {
+      "id": "intellij_projects_file",
+      "type": "input",
+      "name": "Open Project in IntelliJ",
+      "description": "The path to the location of the recent files in IntelliJ",
+      "default_value": "~/.IntelliJIdea2019.1/config/options/recentProjects.xml"
+    },
+    {
+      "id": "intellij_launch_script",
+      "type": "input",
+      "name": "IntelliJ launcher script path",
+      "description": "The location of the PyCharm launch script file",
+      "default_value": "/usr/local/bin/intellij"
     }
   ]
 }
