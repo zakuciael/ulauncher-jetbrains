@@ -86,7 +86,7 @@
       "id": "intellij_launch_script",
       "type": "input",
       "name": "IntelliJ launcher script path",
-      "description": "The location of the PyCharm launch script file",
+      "description": "The location of the IntelliJ launch script file",
       "default_value": "/usr/local/bin/intellij"
     }
   ]
