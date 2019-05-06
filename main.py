@@ -68,7 +68,6 @@ class KeywordQueryEventListener(EventListener):
             ])
         
         for project in projects:
-            print('%s %s &' % (extension.get_launcher_file(keyword), project['path']))
 
             items.append(ExtensionResultItem(
                 icon=extension.get_icon(keyword),
