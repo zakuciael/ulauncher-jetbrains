@@ -21,7 +21,8 @@ class RecentProjectsParser(object):
 
         tree = ET.parse(file_path)
         root = tree.getroot()
-        recent_projects = root.findall('.//component[@name="RecentProjectsManager"][1]/option[@name="recentPaths"]/list/option') + root.findall('.//component[@name="RecentDirectoryProjectsManager"][1]/option[@name="recentPaths"]/list/option')
+        recent_projects = root.findall('.//component[@name="RecentProjectsManager"][1]/option[@name="recentPaths"]/list/option') + root.findall(
+            './/component[@name="RecentDirectoryProjectsManager"][1]/option[@name="recentPaths"]/list/option')
 
         result = []
         for project in recent_projects:
@@ -33,8 +34,8 @@ class RecentProjectsParser(object):
                 continue
 
             result.append({
-                'name':  project_name,
-                'path':  project_path
+                'name': project_name,
+                'path': project_path
             })
 
         return result[:8]

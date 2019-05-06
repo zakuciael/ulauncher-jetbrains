@@ -29,7 +29,8 @@ class JetbrainsLauncherExtension(Extension):
 
     def get_recent_projects_file_path(self, keyword):
         if keyword in ['pstorm', 'webstorm', 'pycharm', 'intellij']:
-            return os.path.expanduser(self.preferences.get("%s_projects_file" % keyword))
+            return os.path.expanduser(
+                self.preferences.get("%s_projects_file" % keyword))
 
         raise AttributeError("Invalid keyword detected")
 
@@ -41,7 +42,8 @@ class JetbrainsLauncherExtension(Extension):
 
     def get_launcher_file(self, keyword):
         """ Returns the launcher file from preferences"""
-        return os.path.expanduser(self.preferences.get("%s_launch_script" % keyword))
+        return os.path.expanduser(
+            self.preferences.get("%s_launch_script" % keyword))
 
 
 class KeywordQueryEventListener(EventListener):
@@ -51,7 +53,7 @@ class KeywordQueryEventListener(EventListener):
     def on_event(self, event, extension):
         """ Handles the event """
         items = []
-        
+
         keyword = event.get_keyword()
         query = event.get_argument() or ""
         file_path = extension.get_recent_projects_file_path(keyword)
@@ -66,7 +68,7 @@ class KeywordQueryEventListener(EventListener):
                     on_enter=HideWindowAction()
                 )
             ])
-        
+
         for project in projects:
 
             items.append(ExtensionResultItem(
