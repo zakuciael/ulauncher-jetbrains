@@ -20,7 +20,7 @@
       "type": "input",
       "name": "Open Project in PHPStorm",
       "description": "The path to the location of the recent files in PHPstorm",
-      "default_value": "~/.PhpStorm2018.1/config/options/recentProjectDirectories.xml"
+      "default_value": "~/.PhpStorm2019.1/config/options/recentProjectDirectories.xml"
     },
     {
       "id": "pstorm_launch_script",
@@ -40,7 +40,7 @@
       "type": "input",
       "name": "Webstorm recent projects file",
       "description": "The path to the location of the recent files in Webstorm",
-      "default_value": "~/.Webstorm2018.1/config/options/recentProjectDirectories.xml"
+      "default_value": "~/.Webstorm2019.1/config/options/recentProjectDirectories.xml"
     },
     {
       "id": "webstorm_launch_script",
@@ -60,7 +60,7 @@
       "type": "input",
       "name": "Open Project in PyCharm",
       "description": "The path to the location of the recent files in PyCharm",
-      "default_value": "~/.PyCharm2018.1/config/options/recentProjectDirectories.xml"
+      "default_value": "~/.PyCharm2019.1/config/options/recentProjectDirectories.xml"
     },
     {
       "id": "pycharm_launch_script",
