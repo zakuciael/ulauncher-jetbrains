@@ -40,7 +40,7 @@
       "type": "input",
       "name": "Webstorm recent projects file",
       "description": "The path to the location of the recent files in Webstorm",
-      "default_value": "~/.Webstorm2019.1/config/options/recentProjectDirectories.xml"
+      "default_value": "~/.WebStorm2019.1/config/options/recentProjectDirectories.xml"
     },
     {
       "id": "webstorm_launch_script",
