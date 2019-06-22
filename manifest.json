@@ -1,6 +1,5 @@
 {
-  "manifest_version": "2",
-  "api_version": "1",
+  "required_api_version": "^2.0.0",
   "name": "jetbrains",
   "description": "Open your recent projects from Jetbrains IDEs",
   "developer_name": "Bruno Paz",
@@ -12,7 +11,8 @@
     {
       "id": "pstorm_keyword",
       "type": "keyword",
-      "name": "PHPStorm | Open Recent",
+      "name": "PHPStorm Projects",
+      "description": "Open Project in PHPStorm",
       "default_value": "pstorm"
     },
     {
@@ -32,7 +32,8 @@
     {
       "id": "webstorm_keyword",
       "type": "keyword",
-      "name": "Webstorm | Open Recent",
+      "name": "Webstorm Projects",
+      "description": "Open Project in Webstorm",
       "default_value": "webstorm"
     },
     {
@@ -52,7 +53,8 @@
     {
       "id": "pycharm_keyword",
       "type": "keyword",
-      "name": "PyCharm | Open Recent",
+      "name": "PyCharm Projects",
+      "description": "Open Project in PyCharm",
       "default_value": "pycharm"
     },
     {
@@ -72,7 +74,8 @@
     {
       "id": "intellij_keyword",
       "type": "keyword",
-      "name": "IntelliJ | Open Recent",
+      "name": "IntelliJ Projects",
+      "description": "Open Project in Intelij",
       "default_value": "intellij"
     },
     {

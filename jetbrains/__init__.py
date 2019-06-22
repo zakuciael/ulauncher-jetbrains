@@ -1,4 +1,4 @@
 """
 Jetbrains module
 """
-from jetbrains.project_parser import *
+from jetbrains.project_parser import RecentProjectsParser

@@ -2,13 +2,11 @@
 Ulauncher extension for opening recent projects on Jetbrains IDEs.
 """
 
-import json
 import logging
 import os
-# pylint: disable=import-error
 from ulauncher.api.client.Extension import Extension
 from ulauncher.api.client.EventListener import EventListener
-from ulauncher.api.shared.event import KeywordQueryEvent, ItemEnterEvent
+from ulauncher.api.shared.event import KeywordQueryEvent
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 from ulauncher.api.shared.action.RenderResultListAction import RenderResultListAction
 from ulauncher.api.shared.action.HideWindowAction import HideWindowAction
@@ -28,6 +26,7 @@ class JetbrainsLauncherExtension(Extension):
         self.subscribe(KeywordQueryEvent, KeywordQueryEventListener())
 
     def get_recent_projects_file_path(self, keyword):
+        """ Returns the file path where the recent projects are stored """
         if keyword in ['pstorm', 'webstorm', 'pycharm', 'intellij']:
             return os.path.expanduser(
                 self.preferences.get("%s_projects_file" % keyword))
