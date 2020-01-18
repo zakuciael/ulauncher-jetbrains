@@ -6,7 +6,7 @@ import os
 import xml.etree.ElementTree as ET
 
 
-class RecentProjectsParser(object):
+class RecentProjectsParser():
     """ Processes the "Recent projects" file from Jetbrains IDEs """
 
     @staticmethod
@@ -19,8 +19,7 @@ class RecentProjectsParser(object):
         if not os.path.isfile(file_path):
             return []
 
-        tree = ET.parse(file_path)
-        root = tree.getroot()
+        root = ET.parse(file_path).getroot()
 
         # pylint: disable=line-too-long
         recent_projects = root.findall('.//component[@name="RecentProjectsManager"][1]/option[@name="recentPaths"]/list/option') + root.findall(
@@ -32,7 +31,7 @@ class RecentProjectsParser(object):
                 '$USER_HOME$', os.path.expanduser('~'))
             project_name = os.path.basename(project_path)
 
-            if query and query not in project_name:
+            if query not in project_name:
                 continue
 
             result.append({

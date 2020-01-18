@@ -1,20 +1,18 @@
 """
 Ulauncher extension for opening recent projects on Jetbrains IDEs.
 """
-
-import logging
 import os
-from ulauncher.api.client.Extension import Extension
+
 from ulauncher.api.client.EventListener import EventListener
+from ulauncher.api.client.Extension import Extension
+from ulauncher.api.shared.action.CopyToClipboardAction import CopyToClipboardAction
+from ulauncher.api.shared.action.HideWindowAction import HideWindowAction
+from ulauncher.api.shared.action.RenderResultListAction import RenderResultListAction
+from ulauncher.api.shared.action.RunScriptAction import RunScriptAction
 from ulauncher.api.shared.event import KeywordQueryEvent
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
-from ulauncher.api.shared.action.RenderResultListAction import RenderResultListAction
-from ulauncher.api.shared.action.HideWindowAction import HideWindowAction
-from ulauncher.api.shared.action.RunScriptAction import RunScriptAction
-from ulauncher.api.shared.action.CopyToClipboardAction import CopyToClipboardAction
-from jetbrains import RecentProjectsParser
 
-LOGGING = logging.getLogger(__name__)
+from jetbrains import RecentProjectsParser
 
 
 class JetbrainsLauncherExtension(Extension):
@@ -25,34 +23,43 @@ class JetbrainsLauncherExtension(Extension):
         super(JetbrainsLauncherExtension, self).__init__()
         self.subscribe(KeywordQueryEvent, KeywordQueryEventListener())
 
+    def find_in_preferences(self, preference_part, keyword):
+        """ Return the value of the preference for the specific IDE """
+        preference = None
+        for ide in ['pstorm', 'webstorm', 'pycharm', 'intellij', 'golang',
+                    'clion', 'rider', 'rubymine', 'androidstudio']:
+            if keyword == self.preferences.get('%s_keyword' % ide):
+                preference = self.preferences.get(ide + preference_part)
+        return preference
+
     def get_recent_projects_file_path(self, keyword):
         """ Returns the file path where the recent projects are stored """
-        if keyword in ['pstorm', 'webstorm', 'pycharm', 'intellij']:
-            return os.path.expanduser(
-                self.preferences.get("%s_projects_file" % keyword))
-
-        raise AttributeError("Invalid keyword detected")
+        path = self.find_in_preferences('_projects_file', keyword)
+        if path:
+            return os.path.expanduser(path)
+        raise AttributeError("Cant find IDE Path")
 
     def get_icon(self, keyword):
         """ Returns the application icon based on the keyword """
-        icon_path = os.path.join('images', "%s.png" % keyword)
-
+        icon_path = None
+        for ide in ['pstorm', 'webstorm', 'pycharm', 'intellij', 'golang',
+                    'clion', 'rider', 'rubymine', 'androidstudio']:
+            if keyword == self.preferences.get('%s_keyword' % ide):
+                icon_path = os.path.join('images', "%s.png" % ide)
         return icon_path
 
     def get_launcher_file(self, keyword):
         """ Returns the launcher file from preferences"""
-        return os.path.expanduser(
-            self.preferences.get("%s_launch_script" % keyword))
+        script = self.find_in_preferences('_launch_script', keyword)
+        return os.path.expanduser(script)
 
 
 class KeywordQueryEventListener(EventListener):
     """ Listener that handles the user input """
-
     # pylint: disable=unused-argument,no-self-use
     def on_event(self, event, extension):
         """ Handles the event """
         items = []
-
         keyword = event.get_keyword()
         query = event.get_argument() or ""
         file_path = extension.get_recent_projects_file_path(keyword)
@@ -67,9 +74,7 @@ class KeywordQueryEventListener(EventListener):
                     on_enter=HideWindowAction()
                 )
             ])
-
         for project in projects:
-
             items.append(ExtensionResultItem(
                 icon=extension.get_icon(keyword),
                 name=project['name'],
@@ -78,7 +83,6 @@ class KeywordQueryEventListener(EventListener):
                     extension.get_launcher_file(keyword), project['path']), []),
                 on_alt_enter=CopyToClipboardAction(project['path'])
             ))
-
         return RenderResultListAction(items)
 
 
