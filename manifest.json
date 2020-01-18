@@ -2,7 +2,7 @@
   "required_api_version": "^2.0.0",
   "name": "jetbrains",
   "description": "Open your recent projects from Jetbrains IDEs",
-  "developer_name": "Bruno Paz",
+  "developer_name": "Bruno Paz, pwnyprod",
   "icon": "images/icon.png",
   "options": {
     "query_debounce": 0.1
@@ -20,7 +20,7 @@
       "type": "input",
       "name": "Open Project in PHPStorm",
       "description": "The path to the location of the recent files in PHPstorm",
-      "default_value": "~/.PhpStorm2019.1/config/options/recentProjectDirectories.xml"
+      "default_value": "~/.PhpStorm2019.3/config/options/recentProjectDirectories.xml"
     },
     {
       "id": "pstorm_launch_script",
@@ -41,7 +41,7 @@
       "type": "input",
       "name": "Webstorm recent projects file",
       "description": "The path to the location of the recent files in Webstorm",
-      "default_value": "~/.WebStorm2019.1/config/options/recentProjectDirectories.xml"
+      "default_value": "~/.WebStorm2019.3/config/options/recentProjectDirectories.xml"
     },
     {
       "id": "webstorm_launch_script",
@@ -62,7 +62,7 @@
       "type": "input",
       "name": "Open Project in PyCharm",
       "description": "The path to the location of the recent files in PyCharm",
-      "default_value": "~/.PyCharm2019.1/config/options/recentProjectDirectories.xml"
+      "default_value": "~/.PyCharm2019.3/config/options/recentProjectDirectories.xml"
     },
     {
       "id": "pycharm_launch_script",
@@ -83,7 +83,7 @@
       "type": "input",
       "name": "Open Project in IntelliJ",
       "description": "The path to the location of the recent files in IntelliJ",
-      "default_value": "~/.IntelliJIdea2019.1/config/options/recentProjects.xml"
+      "default_value": "~/.IntelliJIdea2019.3/config/options/recentProjects.xml"
     },
     {
       "id": "intellij_launch_script",
@@ -91,6 +91,111 @@
       "name": "IntelliJ launcher script path",
       "description": "The location of the IntelliJ launch script file",
       "default_value": "/usr/local/bin/intellij"
+    },
+    {
+      "id": "goland_keyword",
+      "type": "keyword",
+      "name": "GoLand Projects",
+      "description": "Open Project in GoLand",
+      "default_value": "goland"
+    },
+    {
+      "id": "goland_projects_file",
+      "type": "input",
+      "name": "Open Project in GoLand",
+      "description": "The path to the location of the recent files in GoLand",
+      "default_value": "~/.GoLand2019.3/config/options/recentProjectDirectories.xml"
+    },
+    {
+      "id": "goland_launch_script",
+      "type": "input",
+      "name": "GoLang launcher script path",
+      "description": "The location of the GoLang launch script file",
+      "default_value": "/usr/local/bin/golang"
+    },
+    {
+      "id": "clion_keyword",
+      "type": "keyword",
+      "name": "CLion Projects",
+      "description": "Open Project in CLion",
+      "default_value": "clion"
+    },
+    {
+      "id": "clion_projects_file",
+      "type": "input",
+      "name": "Open Project in CLion",
+      "description": "The path to the location of the recent files in CLion",
+      "default_value": "~/.CLion2019.3/config/options/recentProjectDirectories.xml"
+    },
+    {
+      "id": "clion_launch_script",
+      "type": "input",
+      "name": "CLion launcher script path",
+      "description": "The location of the CLion launch script file",
+      "default_value": "/usr/local/bin/clion"
+    },
+    {
+      "id": "rider_keyword",
+      "type": "keyword",
+      "name": "Rider Projects",
+      "description": "Open Project in Rider",
+      "default_value": "rider"
+    },
+    {
+      "id": "rider_projects_file",
+      "type": "input",
+      "name": "Open Project in Rider",
+      "description": "The path to the location of the recent files in Rider",
+      "default_value": "~/.Rider2019.3/config/options/recentProjectDirectories.xml"
+    },
+    {
+      "id": "rider_launch_script",
+      "type": "input",
+      "name": "Rider launcher script path",
+      "description": "The location of the Rider launch script file",
+      "default_value": "/usr/local/bin/rider"
+    },
+    {
+      "id": "rubymine_keyword",
+      "type": "keyword",
+      "name": "RubyMine Projects",
+      "description": "Open Project in RubyMine",
+      "default_value": "rubymine"
+    },
+    {
+      "id": "rubymine_projects_file",
+      "type": "input",
+      "name": "Open Project in RubyMine",
+      "description": "The path to the location of the recent files in RubyMine",
+      "default_value": "~/.RubyMine2019.3/config/options/recentProjectDirectories.xml"
+    },
+    {
+      "id": "rubymine_launch_script",
+      "type": "input",
+      "name": "RubyMine launcher script path",
+      "description": "The location of the RubyMine launch script file",
+      "default_value": "/usr/local/bin/rubymine"
+    },
+    {
+      "id": "androidstudio_keyword",
+      "type": "keyword",
+      "name": "AndroidStudio Projects",
+      "description": "Open Project in AndroidStudio",
+      "default_value": "androidstudio"
+    },
+    {
+      "id": "androidstudio_projects_file",
+      "type": "input",
+      "name": "Open Project in AndroidStudio",
+      "description": "The path to the location of the recent files in AndroidStudio",
+      "default_value": "~/.AndroidStudio3.5/config/options/recentProjectDirectories.xml"
+    },
+    {
+      "id": "androidstudio_launch_script",
+      "type": "input",
+      "name": "AndroidStudio launcher script path",
+      "description": "The location of the AndroidStudio launch script file",
+      "default_value": "/usr/local/bin/androidstudio"
     }
   ]
 }
