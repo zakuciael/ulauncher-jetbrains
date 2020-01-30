@@ -188,7 +188,7 @@
       "type": "input",
       "name": "Open Project in AndroidStudio",
       "description": "The path to the location of the recent files in AndroidStudio",
-      "default_value": "~/.AndroidStudio3.5/config/options/recentProjectDirectories.xml"
+      "default_value": "~/.AndroidStudio3.5/config/options/recentProjects.xml"
     },
     {
       "id": "androidstudio_launch_script",
