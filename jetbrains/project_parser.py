@@ -2,6 +2,7 @@
 Parses the Jetbrains based IDEs recent projects list
 """
 
+import glob
 import os
 import xml.etree.ElementTree as ET
 
@@ -30,13 +31,15 @@ class RecentProjectsParser():
             project_path = project.attrib["value"].replace(
                 '$USER_HOME$', os.path.expanduser('~'))
             project_name = os.path.basename(project_path)
+            icons = glob.glob(os.path.join(project_path, '.idea', 'icon.*'))
 
             if query and query.lower() not in project_name.lower():
                 continue
 
             result.append({
                 'name': project_name,
-                'path': project_path
+                'path': project_path,
+                'icon': icons[0] if len(icons) > 0 else None
             })
 
         return result[:8]

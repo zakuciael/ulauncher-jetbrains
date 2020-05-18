@@ -76,7 +76,7 @@ class KeywordQueryEventListener(EventListener):
             ])
         for project in projects:
             items.append(ExtensionResultItem(
-                icon=extension.get_icon(keyword),
+                icon=project['icon'] if project['icon'] is not None else extension.get_icon(keyword),
                 name=project['name'],
                 description=project['path'],
                 on_enter=RunScriptAction('%s "%s" &' % (
