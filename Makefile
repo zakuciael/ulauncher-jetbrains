@@ -9,7 +9,7 @@ help: ## Show help menu
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 lint: ## Run Pylint
-	@find . -iname "*.py" | xargs pylint
+	flake8 .
 
 format: ## Format code using yapf
 	@yapf --in-place --recursive .

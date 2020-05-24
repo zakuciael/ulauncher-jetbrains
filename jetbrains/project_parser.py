@@ -9,7 +9,6 @@ import xml.etree.ElementTree as ET
 
 class RecentProjectsParser():
     """ Processes the "Recent projects" file from Jetbrains IDEs """
-
     @staticmethod
     def parse(file_path, query):
         """
@@ -23,8 +22,11 @@ class RecentProjectsParser():
         root = ET.parse(file_path).getroot()
 
         # pylint: disable=line-too-long
-        recent_projects = root.findall('.//component[@name="RecentProjectsManager"][1]/option[@name="recentPaths"]/list/option') + root.findall(
-            './/component[@name="RecentDirectoryProjectsManager"][1]/option[@name="recentPaths"]/list/option')
+        recent_projects = root.findall(
+            './/component[@name="RecentProjectsManager"][1]/option[@name="recentPaths"]/list/option'
+        ) + root.findall(
+            './/component[@name="RecentDirectoryProjectsManager"][1]/option[@name="recentPaths"]/list/option'
+        )
 
         result = []
         for project in recent_projects:

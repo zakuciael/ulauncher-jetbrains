@@ -17,7 +17,6 @@ from jetbrains import RecentProjectsParser
 
 class JetbrainsLauncherExtension(Extension):
     """ Main Extension Class  """
-
     def __init__(self):
         """ Initializes the extension """
         super(JetbrainsLauncherExtension, self).__init__()
@@ -26,8 +25,10 @@ class JetbrainsLauncherExtension(Extension):
     def find_in_preferences(self, preference_part, keyword):
         """ Return the value of the preference for the specific IDE """
         preference = None
-        for ide in ['pstorm', 'webstorm', 'pycharm', 'intellij', 'golang',
-                    'clion', 'rider', 'rubymine', 'androidstudio']:
+        for ide in [
+                'pstorm', 'webstorm', 'pycharm', 'intellij', 'golang', 'clion',
+                'rider', 'rubymine', 'androidstudio'
+        ]:
             if keyword == self.preferences.get('%s_keyword' % ide):
                 preference = self.preferences.get(ide + preference_part)
         return preference
@@ -42,8 +43,10 @@ class JetbrainsLauncherExtension(Extension):
     def get_icon(self, keyword):
         """ Returns the application icon based on the keyword """
         icon_path = None
-        for ide in ['pstorm', 'webstorm', 'pycharm', 'intellij', 'golang',
-                    'clion', 'rider', 'rubymine', 'androidstudio']:
+        for ide in [
+                'pstorm', 'webstorm', 'pycharm', 'intellij', 'golang', 'clion',
+                'rider', 'rubymine', 'androidstudio'
+        ]:
             if keyword == self.preferences.get('%s_keyword' % ide):
                 icon_path = os.path.join('images', "%s.png" % ide)
         return icon_path
@@ -56,6 +59,7 @@ class JetbrainsLauncherExtension(Extension):
 
 class KeywordQueryEventListener(EventListener):
     """ Listener that handles the user input """
+
     # pylint: disable=unused-argument,no-self-use
     def on_event(self, event, extension):
         """ Handles the event """
@@ -68,21 +72,21 @@ class KeywordQueryEventListener(EventListener):
 
         if not projects:
             return RenderResultListAction([
-                ExtensionResultItem(
-                    icon=extension.get_icon(keyword),
-                    name='No projects found',
-                    on_enter=HideWindowAction()
-                )
+                ExtensionResultItem(icon=extension.get_icon(keyword),
+                                    name='No projects found',
+                                    on_enter=HideWindowAction())
             ])
         for project in projects:
-            items.append(ExtensionResultItem(
-                icon=project['icon'] if project['icon'] is not None else extension.get_icon(keyword),
-                name=project['name'],
-                description=project['path'],
-                on_enter=RunScriptAction('%s "%s" &' % (
-                    extension.get_launcher_file(keyword), project['path']), []),
-                on_alt_enter=CopyToClipboardAction(project['path'])
-            ))
+            items.append(
+                ExtensionResultItem(
+                    icon=project['icon'] if project['icon'] is not None else
+                    extension.get_icon(keyword),
+                    name=project['name'],
+                    description=project['path'],
+                    on_enter=RunScriptAction(
+                        '%s "%s" &' % (extension.get_launcher_file(keyword),
+                                       project['path']), []),
+                    on_alt_enter=CopyToClipboardAction(project['path'])))
         return RenderResultListAction(items)
 
 
