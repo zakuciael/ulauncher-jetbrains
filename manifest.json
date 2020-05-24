@@ -20,7 +20,7 @@
       "type": "input",
       "name": "Open Project in PHPStorm",
       "description": "The path to the location of the recent files in PHPstorm",
-      "default_value": "~/.PhpStorm2019.3/config/options/recentProjectDirectories.xml"
+      "default_value": "~/.config/JetBrains/PhpStorm2020.1/options/recentProjects.xml"
     },
     {
       "id": "pstorm_launch_script",
