@@ -26,7 +26,7 @@ class JetbrainsLauncherExtension(Extension):
         """ Return the value of the preference for the specific IDE """
         preference = None
         for ide in [
-                'pstorm', 'webstorm', 'pycharm', 'intellij', 'golang', 'clion',
+                'pstorm', 'webstorm', 'pycharm', 'intellij', 'goland', 'clion',
                 'rider', 'rubymine', 'androidstudio'
         ]:
             if keyword == self.preferences.get('%s_keyword' % ide):
@@ -44,7 +44,7 @@ class JetbrainsLauncherExtension(Extension):
         """ Returns the application icon based on the keyword """
         icon_path = None
         for ide in [
-                'pstorm', 'webstorm', 'pycharm', 'intellij', 'golang', 'clion',
+                'pstorm', 'webstorm', 'pycharm', 'intellij', 'goland', 'clion',
                 'rider', 'rubymine', 'androidstudio'
         ]:
             if keyword == self.preferences.get('%s_keyword' % ide):

@@ -109,9 +109,9 @@
     {
       "id": "goland_launch_script",
       "type": "input",
-      "name": "GoLang launcher script path",
-      "description": "The location of the GoLang launch script file",
-      "default_value": "/usr/local/bin/golang"
+      "name": "GoLand launcher script path",
+      "description": "The location of the GoLand launch script file",
+      "default_value": "/usr/local/bin/goland"
     },
     {
       "id": "clion_keyword",

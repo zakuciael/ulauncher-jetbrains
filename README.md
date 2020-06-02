@@ -32,7 +32,7 @@ The following Jetbrains IDEs are supported:
 * WebStorm
 * PyCharm
 * InteliJ
-* GoLang
+* GoLand
 * CLion
 * AndroidStudio
 * Rider
