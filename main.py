@@ -12,7 +12,7 @@ from ulauncher.api.shared.action.RunScriptAction import RunScriptAction
 from ulauncher.api.shared.event import KeywordQueryEvent
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 
-from jetbrains import RecentProjectsParser
+from jetbrains.project_parser import RecentProjectsParser
 
 
 class JetbrainsLauncherExtension(Extension):
