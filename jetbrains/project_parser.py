@@ -21,7 +21,6 @@ class RecentProjectsParser():
 
         root = ET.parse(file_path).getroot()
 
-        # pylint: disable=line-too-long
         recent_projects = root.findall(
             './/component[@name="RecentProjectsManager"][1]/option[@name="recentPaths"]/list/option'
         ) + root.findall(
@@ -42,7 +41,8 @@ class RecentProjectsParser():
             project_name = os.path.basename(project_path)
             icons = glob.glob(os.path.join(project_path, '.idea', 'icon.*'))
 
-            if query and query.lower() not in project_name.lower() and query.lower() not in project_title.lower():
+            if query and query.lower() not in project_name.lower(
+            ) and query.lower() not in project_title.lower():
                 continue
 
             result.append({
