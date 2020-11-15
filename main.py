@@ -12,14 +12,13 @@ from ulauncher.api.shared.action.RenderResultListAction import RenderResultListA
 from ulauncher.api.shared.action.HideWindowAction import HideWindowAction
 from ulauncher.api.shared.action.RunScriptAction import RunScriptAction
 from ulauncher.api.shared.action.CopyToClipboardAction import CopyToClipboardAction
-from jetbrains import RecentProjectsParser
+from jetbrains.project_parser import RecentProjectsParser
 
 LOGGING = logging.getLogger(__name__)
 
 
 class JetbrainsLauncherExtension(Extension):
     """ Main Extension Class  """
-
     def __init__(self):
         """ Initializes the extension """
         super(JetbrainsLauncherExtension, self).__init__()
@@ -61,23 +60,22 @@ class KeywordQueryEventListener(EventListener):
 
         if not projects:
             return RenderResultListAction([
-                ExtensionResultItem(
-                    icon=extension.get_icon(keyword),
-                    name='No projects found',
-                    on_enter=HideWindowAction()
-                )
+                ExtensionResultItem(icon=extension.get_icon(keyword),
+                                    name='No projects found',
+                                    on_enter=HideWindowAction())
             ])
 
         for project in projects:
 
-            items.append(ExtensionResultItem(
-                icon=extension.get_icon(keyword),
-                name=project['name'],
-                description=project['path'],
-                on_enter=RunScriptAction('%s %s &' % (
-                    extension.get_launcher_file(keyword), project['path']), []),
-                on_alt_enter=CopyToClipboardAction(project['path'])
-            ))
+            items.append(
+                ExtensionResultItem(
+                    icon=extension.get_icon(keyword),
+                    name=project['name'],
+                    description=project['path'],
+                    on_enter=RunScriptAction(
+                        '%s %s &' % (extension.get_launcher_file(keyword),
+                                     project['path']), []),
+                    on_alt_enter=CopyToClipboardAction(project['path'])))
 
         return RenderResultListAction(items)
 

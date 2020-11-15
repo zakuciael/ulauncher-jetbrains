@@ -64,13 +64,33 @@ To see your changes, stop ulauncher and run it from the command line with: `ulau
 
 All contributions are welcome.
 
-## Show your support
+## 💛 Support the project
 
-<a href="https://www.buymeacoffee.com/Z1Bu6asGV" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
+If this project was useful to you in some form, I would be glad to have your support.  It will help to keep the project alive and to have more time to work on Open Source.
 
-## License 
+The sinplest form of support is to give a ⭐️ to this repo.
 
-Copywright @ 2019 [Bruno Paz](https://github.com/brpaz)
+You can also contribute with [GitHub Sponsors](https://github.com/sponsors/brpaz).
 
-This project is [MIT](LLICENSE) Licensed.
+[![GitHub Sponsors](https://img.shields.io/badge/GitHub%20Sponsors-Sponsor%20Me-red?style=for-the-badge)](https://github.com/sponsors/brpaz)
+
+
+Or if you prefer a one time donation to the project, you can simple:
+
+<a href="https://www.buymeacoffee.com/Z1Bu6asGV" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: auto !important;width: auto !important;" ></a>
+
+## Author
+
+👤 **Bruno Paz**
+
+* Website: [brunopaz.dev](https://brunopaz.dev)
+* Github: [@brpaz](https://github.com/brpaz)
+* Twitter: [@brunopaz88](https://twitter.com/brunopaz88)
+  
+## 📝 License
+
+Copyright © 2020 [Bruno Paz](https://github.com/brpaz).
+
+This project is [MIT](https://opensource.org/licenses/MIT) licensed.
+
 

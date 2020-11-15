@@ -8,7 +8,6 @@ import xml.etree.ElementTree as ET
 
 class RecentProjectsParser(object):
     """ Processes the "Recent projects" file from Jetbrains IDEs """
-
     @staticmethod
     def parse(file_path, query):
         """
@@ -22,9 +21,12 @@ class RecentProjectsParser(object):
         tree = ET.parse(file_path)
         root = tree.getroot()
 
-        # pylint: disable=line-too-long
-        recent_projects = root.findall('.//component[@name="RecentProjectsManager"][1]/option[@name="recentPaths"]/list/option') + root.findall(
-            './/component[@name="RecentDirectoryProjectsManager"][1]/option[@name="recentPaths"]/list/option')
+        # noqa: E501
+        recent_projects = root.findall(
+            './/component[@name="RecentProjectsManager"][1]/option[@name="recentPaths"]/list/option'
+        ) + root.findall(
+            './/component[@name="RecentDirectoryProjectsManager"][1]/option[@name="recentPaths"]/list/option'
+        )
 
         result = []
         for project in recent_projects:
@@ -35,9 +37,6 @@ class RecentProjectsParser(object):
             if query and query not in project_name:
                 continue
 
-            result.append({
-                'name': project_name,
-                'path': project_path
-            })
+            result.append({'name': project_name, 'path': project_path})
 
         return result[:8]
