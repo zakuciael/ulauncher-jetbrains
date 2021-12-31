@@ -61,7 +61,7 @@ After that, follow below instructions to configure the extension settings:
 2. Select `Extensions` tab
 3. Click on `JetBrains Launcher` extension
 4. Set the `Shell scripts location` value to the path configured in the JetBrains Toolbox app 
-5. Set the `IDE config location` value to the folder in witch JetBrains IDEs store their configurations  
+5. Set the `Configs location` value to the folder in which JetBrains IDEs store their configurations  
     **Default location:** ``~/.config/JetBrains/``
 
 ## Contributing
