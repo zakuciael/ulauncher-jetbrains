@@ -11,10 +11,13 @@ link: ## Symlink the project source directory with Ulauncher extensions dir.
 unlink: ## Unlink extension from Ulauncher
 	@rm -r ~/.local/share/ulauncher/extensions/${EXT_NAME}
 
+deps: ## Install Python Dependencies
+	@pip install -r requirements.txt
+
 dev: ## Runs ulauncher on development mode
 	ulauncher -v --dev --no-extensions  |& grep "${EXT_NAME}"
 
-start:
+start: ## Starts extension backend for development
 ifeq ($(shell echo ${PORT} | egrep "${PORT_REGEX}"),)
 	@echo "Port is not an number"
 else

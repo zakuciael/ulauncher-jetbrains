@@ -28,15 +28,19 @@
 
 ### Requirements
 
+#### Programs
 - Ulauncher 5
 - Python 3
 - Jetbrains IDE
+#### Packages
+- semver >=2.13.0
 
 To install this extension:
-1. Open `Preferences` window
-2. Select `Extensions` tab
-3. Click `Add extension` button on the sidebar
-4. Paste the following url: `https://github.com/zakuciael/ulauncher-jetbrains`
+1. Install required packages
+2. Open `Preferences` window
+3. Select `Extensions` tab
+4. Click `Add extension` button on the sidebar
+5. Paste the following url: `https://github.com/zakuciael/ulauncher-jetbrains`
 
 ## Usage
 
