@@ -81,7 +81,8 @@ The output will display something like this:
 2020-11-15 10:24:16,869 | WARNING | ulauncher.api.server.ExtensionRunner: _run_process() | VERBOSE=1 ULAUNCHER_WS_API=ws://127.0.0.1:5054/ulauncher-jetbrains PYTHONPATH=/usr/lib/python3.10/site-packages /usr/bin/python3 /home/zakku/.local/share/ulauncher/extensions/ulauncher-jetbrains/main.py
 ```
 
-In another terminal run `make start` command to run the extension backend.
+In another terminal run `make PORT=<PORT> start` command to run the extension backend.
+> Note: The ``<PORT>`` variable refers to the port number found in the ``ULAUNCHER_WS_API`` env located in the above log.
 
 To see your changes, CTRL+C the previous command and run it again to refresh.
 
