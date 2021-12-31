@@ -9,6 +9,13 @@
   },
   "preferences": [
     {
+      "id": "global_keyword",
+      "type": "keyword",
+      "name": "Global keyword",
+      "description": "Global keyword used by the extension",
+      "default_value": "ide"
+    },
+    {
       "id": "scripts_path",
       "type": "input",
       "name": "Shell scripts location",
