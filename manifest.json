@@ -27,7 +27,7 @@
       "type": "text",
       "name": "IDE Keywords",
       "description": "Keywords used to identify IDEs. Example format: webstorm: webstorm; phpstorm: phpstorm;",
-      "default_value": "clion: clion; idea: idea; intellij: idea; phpstorm: phpstorm; pycharm: pycharm; rider: rider; webstorm: webstorm;"
+      "default_value": "clion: clion; idea: idea; intellij: idea; phpstorm: phpstorm; php: phpstorm; pycharm: pycharm; py: pycharm; rider: rider; webstorm: webstorm; web: webstorm;"
     }
   ]
 }
