@@ -3,7 +3,7 @@
   "name": "Jetbrains Launcher",
   "description": "Open your projects in Jetbrains IDEs",
   "developer_name": "Krzysztof Saczuk, Bruno Paz, pwnyprod",
-  "icon": "images/icon.png",
+  "icon": "images/icon.svg",
   "options": {
     "query_debounce": 0.1
   },
