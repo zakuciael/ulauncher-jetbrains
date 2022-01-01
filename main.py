@@ -13,10 +13,11 @@ from ulauncher.api.shared.action.RenderResultListAction import RenderResultListA
 from ulauncher.api.shared.action.RunScriptAction import RunScriptAction
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 from ulauncher.api.shared.event import KeywordQueryEvent
+from ulauncher.utils.decorator.debounce import debounce
 from ulauncher.api.shared.Response import Response
 
-from jetbrains.projects_parser import ProjectsParser
-from ulauncher.utils.decorator.debounce import debounce
+from utils.projects_parser import ProjectsParser
+from utils.projects_list import ProjectsList
 
 
 class JetbrainsLauncherExtension(Extension):
@@ -141,25 +142,20 @@ class JetbrainsLauncherExtension(Extension):
         return path
 
     @debounce(0.5)
-    def handle_query(self, event, args, ide_key=None):
-        query = " ".join(args)
-
-        print(f"Query: {query}")
-        print(f"IDE Key: {ide_key}")
-
-        projects = []
+    def handle_query(self, event, query, ide_key=None):
+        projects = ProjectsList(query, min_score=(60 if len(query) > 0 else 0), limit=8)
 
         if ide_key is not None:
-            projects = self.get_recent_projects(ide_key)
+            projects.extend(self.get_recent_projects(ide_key))
         else:
             for key in self.ides.keys():
-                projects = projects + self.get_recent_projects(key)
+                projects.extend(self.get_recent_projects(key))
 
-        items = []
-        
+        results = []
+
         try:
             if len(projects) == 0:
-                items.append(
+                results.append(
                     ExtensionResultItem(
                         icon=self.get_ide_icon(ide_key) if ide_key is not None else self.get_base_icon(),
                         name="No projects found",
@@ -168,13 +164,13 @@ class JetbrainsLauncherExtension(Extension):
                 )
                 return
 
-            for project in projects[:8]:
-                items.append(
+            for project in projects:
+                results.append(
                     ExtensionResultItem(
                         icon=project.get("icon") if project.get("icon") is not None else
                         self.get_ide_icon(project.get("ide")),
                         name=project.get("name"),
-                        description=os.path.join("~", os.path.relpath(project.get("path"), os.path.expanduser("~"))),
+                        description=project.get("path"),
                         on_enter=RunScriptAction(
                             self.get_ide_launcher_script(project.get("ide")),
                             [project.get("path"), "&"]
@@ -184,7 +180,7 @@ class JetbrainsLauncherExtension(Extension):
                 )
         finally:
             # Dirty way to send responses while using debouncing
-            self._client.send(Response(event, RenderResultListAction(items)))
+            self._client.send(Response(event, RenderResultListAction(results)))
 
 
 class KeywordQueryEventListener(EventListener):
@@ -199,9 +195,9 @@ class KeywordQueryEventListener(EventListener):
 
         args = [arg.lower() for arg in re.split("[ /]+", (event.get_argument() or ""))]
         ide_key = args[0] if extension.check_ide_key((args[0] if len(args) > 0 else "")) else None
-        args = args[1:] if ide_key is not None else args
+        query = " ".join(args[1:] if ide_key is not None else args).strip()
 
-        extension.handle_query(event, args, ide_key)
+        extension.handle_query(event, query, ide_key)
 
 
 if __name__ == "__main__":

@@ -30,9 +30,11 @@ class ProjectsParser:
             root.findall('%s/option[@name="recentPaths"]/list/option' % recent_directory_projects_manager_path) + \
             root.findall('%s/option[@name="additionalInfo"]/map/entry' % recent_projects_manager_path) + \
             root.findall('%s/option[@name="additionalInfo"]/map/entry' % recent_directory_projects_manager_path)
-        project_paths = list(OrderedDict.fromkeys([(project.attrib['value' if 'value' in project.attrib else 'key']).replace(
-            '$USER_HOME$', os.path.expanduser('~')
-        ) for project in raw_projects]))
+        project_paths = list(OrderedDict.fromkeys([
+            (project.attrib['value' if 'value' in project.attrib else 'key']).replace(
+                "$USER_HOME$", "~"
+            ) for project in raw_projects
+        ]))
 
         output = []
         for path in project_paths:
@@ -43,12 +45,13 @@ class ProjectsParser:
                 with open(name_file, 'r') as file:
                     name = file.read().replace('\n', '')
 
-            icons = glob.glob(os.path.join(path, '.idea', 'icon.*'))
+            icons = glob.glob(os.path.join(os.path.expanduser(path), '.idea', 'icon.*'))
 
             output.append({
                 'name': name or os.path.basename(path),
                 'path': path,
-                'icon': icons[0] if len(icons) > 0 else None
+                'icon': icons[0] if len(icons) > 0 else None,
+                'score': 0
             })
 
         return output
