@@ -1,8 +1,10 @@
-import os
-
-from ulauncher.search.Query import Query
+from typing_extensions import TYPE_CHECKING
 from ulauncher.utils.SortedCollection import SortedCollection
 from ulauncher.utils.fuzzy_search import get_score
+
+if TYPE_CHECKING:
+    # noinspection PyUnresolvedReferences
+    from types.project import Project
 
 
 class ProjectsList:
@@ -11,6 +13,11 @@ class ProjectsList:
     (sorted by a score, which is a similarity between item's name and a query)
     and limited to a number `limit` passed into the constructor
     """
+
+    _query: str
+    _min_score: int
+    _limit: int
+    _items: SortedCollection
 
     def __init__(self, query, min_score=30, limit=9):
         self._query = query.lower().strip()
@@ -45,7 +52,7 @@ class ProjectsList:
         for item in items:
             self.append(item)
 
-    def append(self, project):
+    def append(self, project: 'Project'):
         name = project.get("name")
         path = project.get("path").replace(r"^~", "")
 

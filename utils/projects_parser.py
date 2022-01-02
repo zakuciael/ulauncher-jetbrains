@@ -7,15 +7,21 @@ import os
 from xml.etree import ElementTree
 from collections import OrderedDict
 
+from typing_extensions import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    # noinspection PyUnresolvedReferences
+    from types.project import Project
+
 
 class ProjectsParser:
     """ Processes the "Recent projects" file from Jetbrains IDEs """
 
     @staticmethod
-    def parse(file_path):
+    def parse(file_path: str) -> list['Project']:
         """
         Parses the recent projects file passed as argument and returns a list of projects
-        @param str file_path: The path to the file which holds the recent open projects by the IDE
+        :param file_path: The path to the file which holds the recent projects data
         """
 
         if not os.path.isfile(file_path):

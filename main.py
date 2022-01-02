@@ -19,10 +19,17 @@ from ulauncher.api.shared.Response import Response
 from utils.projects_parser import ProjectsParser
 from utils.projects_list import ProjectsList
 
+from typing_extensions import TYPE_CHECKING
+from typing import Optional, TypedDict
+
+if TYPE_CHECKING:
+    from types.ide_types import IdeOptionsDict, IdeOptions, IdeKey
+    from types.project import Project
+
 
 class JetbrainsLauncherExtension(Extension):
     """ Main Extension Class  """
-    ides = {
+    ides: 'IdeOptionsDict' = {
         "clion": {"name": "CLion", "config_prefix": "CLion", "launcher_prefix": "clion"},
         "idea": {"name": "IntelliJ IDEA", "config_prefix": "IntelliJIdea", "launcher_prefix": "idea"},
         "phpstorm": {"name": "PHPStorm", "config_prefix": "PHPStorm", "launcher_prefix": "phpstorm"},
@@ -51,15 +58,16 @@ class JetbrainsLauncherExtension(Extension):
     def check_ide_key(self, key):
         """
         Checks if the provided key is an valid IDE key
-        @param str key: Key used to check validity
+        :param key: Key used to check validity
+        :type key: str
         """
 
         return True if key in self.ides.keys() else False
 
-    def get_ide_options(self, ide_key):
+    def get_ide_options(self, ide_key) -> 'IdeOptions | None':
         """
         Returns the IDE options
-        @parm str ide_key: The IDE key
+        :parm ide_key: The IDE key
         """
 
         if not self.check_ide_key(ide_key):
@@ -67,10 +75,10 @@ class JetbrainsLauncherExtension(Extension):
 
         return next((options for key, options in self.ides.items() if key == ide_key), None)
 
-    def get_recent_projects(self, ide_key):
+    def get_recent_projects(self, ide_key) -> list['Project']:
         """
         Returns the file path where the recent projects are stored
-        @param str ide_key: The IDE key
+        :param ide_key: The IDE key
         """
 
         base_path = self.preferences.get("configs_path")
@@ -81,7 +89,7 @@ class JetbrainsLauncherExtension(Extension):
         if ide_options is None:
             raise AttributeError("Invalid ide key specified")
 
-        configs = []
+        configs: list[TypedDict("Config", {"path": str, "version": semver.VersionInfo})] = []
         for path in os.listdir(os.path.expanduser(base_path)):
             match = re.match(rf'^{ide_options.get("config_prefix")}(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)$', path)
 
@@ -106,10 +114,10 @@ class JetbrainsLauncherExtension(Extension):
 
         return projects
 
-    def get_ide_icon(self, ide_key):
+    def get_ide_icon(self, ide_key: 'IdeKey') -> str:
         """
         Returns the IDE icon
-        @param str ide_key: The IDE key
+        :param ide_key: The IDE key
         """
 
         if not self.check_ide_key(ide_key):
@@ -121,10 +129,10 @@ class JetbrainsLauncherExtension(Extension):
 
         return path
 
-    def get_ide_launcher_script(self, ide_key):
+    def get_ide_launcher_script(self, ide_key: 'IdeKey') -> str:
         """
         Returns the IDE launcher script path
-        @param str ide_key: The IDE key
+        :param ide_key: The IDE key
         """
 
         scripts_path = self.preferences.get("scripts_path")
@@ -142,7 +150,7 @@ class JetbrainsLauncherExtension(Extension):
         return path
 
     @debounce(0.5)
-    def handle_query(self, event, query, ide_key=None):
+    def handle_query(self, event: KeywordQueryEvent, query: str, ide_key: Optional['IdeKey'] = None) -> None:
         projects = ProjectsList(query, min_score=(60 if len(query) > 0 else 0), limit=8)
 
         if ide_key is not None:
