@@ -13,8 +13,12 @@
 <a href="https://ulauncher.io/" target="_blank">Ulauncher</a> extension that let's you open your projects in <a href="https://www.jetbrains.com/products/" target="_blank">JetBrains IDEs</a>
 </h4>
 
-> ##### Note: This is a **fork** of the extension called <a href="https://github.com/brpaz/ulauncher-jetbrains" target="_blank">ulauncher-jetbrains</a> made by <a href="https://github.com/brpaz" target="_blank">Bruno Paz</a>  
-> And adds new features such as **fuzzy project search**, **multi-ide search**, **custom ide aliases**; and some improvements, most notably **support for 2021.3 versions of IDEs** and **preferences settings**.
+<h5 align="center">
+This project is a fork of the extension called <a href="https://github.com/brpaz/ulauncher-jetbrains" target="_blank">ulauncher-jetbrains</a> made by <a href="https://github.com/brpaz" target="_blank">Bruno Paz</a>.<br>
+
+It adds new features such as fuzzy project search, multi-ide queries and custom ide aliases;<br>
+It also adds improvements over the original project, most notably support for 2021.3 versions of IDEs and better preferences settings.
+</h5>
 
 <p align="center">
   <a href="https://github.com/zakuciael/ulauncher-jetbrains-reloaded">
