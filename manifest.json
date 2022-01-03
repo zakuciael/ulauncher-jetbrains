@@ -1,8 +1,8 @@
 {
   "required_api_version": "^2.0.0",
-  "name": "Jetbrains Launcher",
+  "name": "Jetbrains Launcher Reloaded",
   "description": "Open your projects in Jetbrains IDEs",
-  "developer_name": "Krzysztof Saczuk, Bruno Paz, pwnyprod",
+  "developer_name": "Krzysztof Saczuk",
   "icon": "images/icon.svg",
   "options": {
     "query_debounce": 0.5

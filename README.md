@@ -1,11 +1,11 @@
 <!--suppress HtmlDeprecatedAttribute -->
 <h1 align="center">
-  <a href="https://github.com/zakuciael/ulauncher-jetbrains">
-    <img alt="Ulauncher JetBrains" src="https://raw.githubusercontent.com/zakuciael/ulauncher-jetbrains/master/.github/logo.svg?sanitize=true" width="130">
+  <a href="https://github.com/zakuciael/ulauncher-jetbrains-reloaded">
+    <img alt="Ulauncher JetBrains" src="https://raw.githubusercontent.com/zakuciael/ulauncher-jetbrains-reloaded/master/.github/logo.svg?sanitize=true" width="130">
   </a>
 	<br>
 	<br>
-  Ulauncher JetBrains
+  Ulauncher JetBrains Reloaded
 </h1>
 
 <h6 align="center">Overview</h6>
@@ -13,13 +13,16 @@
 <a href="https://ulauncher.io/" target="_blank">Ulauncher</a> extension that let's you open your projects in <a href="https://www.jetbrains.com/products/" target="_blank">JetBrains IDEs</a>
 </h4>
 
+> ##### Note: This is a **fork** of the extension called <a href="https://github.com/brpaz/ulauncher-jetbrains" target="_blank">ulauncher-jetbrains</a> made by <a href="https://github.com/brpaz" target="_blank">Bruno Paz</a>  
+> And adds new features such as **fuzzy project search**, **multi-ide search**, **custom ide aliases**; and some improvements, most notably **support for 2021.3 versions of IDEs** and **preferences settings**.
+
 <p align="center">
-  <a href="https://www.npmjs.com/package/@zakku/tabby-theme">
+  <a href="https://github.com/zakuciael/ulauncher-jetbrains-reloaded">
     <img src="https://img.shields.io/badge/Ulauncher-Extension-green.svg"
       alt="Ulauncher Extension" />
   </a>
-  <a href="https://github.com/zakuciael/ulauncher-jetbrains/blob/master/LICENSE">
-    <img src="https://img.shields.io/github/license/zakuciael/ulauncher-jetbrains.svg"
+  <a href="https://github.com/zakuciael/ulauncher-jetbrains-reloaded/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/zakuciael/ulauncher-jetbrains-reloaded.svg"
       alt="License" />
   </a>
 </p>
@@ -40,7 +43,7 @@ To install this extension:
 2. Open `Preferences` window
 3. Select `Extensions` tab
 4. Click `Add extension` button on the sidebar
-5. Paste the following url: `https://github.com/zakuciael/ulauncher-jetbrains`
+5. Paste the following url: `https://github.com/zakuciael/ulauncher-jetbrains-reloaded`
 
 ## Usage
 
@@ -82,7 +85,7 @@ To see your changes, stop ulauncher and run it from the command line with: `make
 The output will display something like this:
 
 ```
-2020-11-15 10:24:16,869 | WARNING | ulauncher.api.server.ExtensionRunner: _run_process() | VERBOSE=1 ULAUNCHER_WS_API=ws://127.0.0.1:5054/ulauncher-jetbrains PYTHONPATH=/usr/lib/python3.10/site-packages /usr/bin/python3 /home/zakku/.local/share/ulauncher/extensions/ulauncher-jetbrains/main.py
+2020-11-15 10:24:16,869 | WARNING | ulauncher.api.server.ExtensionRunner: _run_process() | VERBOSE=1 ULAUNCHER_WS_API=ws://127.0.0.1:5054/com.github.zakuciael.ulauncher-jetbrains-reloaded PYTHONPATH=/usr/lib/python3.10/site-packages /usr/bin/python3 /home/zakku/.local/share/ulauncher/extensions/com.github.zakuciael.ulauncher-jetbrains-reloaded/main.py
 ```
 
 In another terminal run `make PORT=<PORT> start` command to run the extension backend.

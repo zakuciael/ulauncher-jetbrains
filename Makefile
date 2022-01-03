@@ -1,5 +1,5 @@
 PORT_REGEX := ^[0-9]+([.][0-9]+)?$
-EXT_NAME:=com.github.zakuciael.ulauncher-jetbrains
+EXT_NAME:=com.github.zakuciael.ulauncher-jetbrains-reloaded
 EXT_DIR:=$(shell pwd)
 
 .PHONY: help lint format link unlink deps dev setup
@@ -21,7 +21,7 @@ start: ## Starts extension backend for development
 ifeq ($(shell echo ${PORT} | egrep "${PORT_REGEX}"),)
 	@echo "Port is not an number"
 else
-	VERBOSE=1 ULAUNCHER_WS_API=ws://127.0.0.1:${PORT}/com.github.zakuciael.ulauncher-jetbrains python3 ~/.local/share/ulauncher/extensions/${EXT_NAME}/main.py
+	VERBOSE=1 ULAUNCHER_WS_API=ws://127.0.0.1:${PORT}/${EXT_NAME} python3 ~/.local/share/ulauncher/extensions/${EXT_NAME}/main.py
 endif
 
 help: ## Show help menu
