@@ -15,7 +15,6 @@ from ulauncher.api.shared.action.RenderResultListAction import RenderResultListA
 from ulauncher.api.shared.action.RunScriptAction import RunScriptAction
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 from ulauncher.api.shared.event import KeywordQueryEvent, PreferencesEvent, PreferencesUpdateEvent
-from ulauncher.utils.decorator.debounce import debounce
 from ulauncher.api.shared.Response import Response
 
 from events.keyword_query_event import KeywordQueryEventListener
@@ -177,9 +176,11 @@ class JetbrainsLauncherExtension(Extension):
 
         return path
 
-    @debounce(0.5)
+    # @debounce(0.5)
     def handle_query(self, event: KeywordQueryEvent, query: str, ide_key: 'IdeKey | None') -> None:
         projects = ProjectsList(query, min_score=(60 if len(query) > 0 else 0), limit=8)
+
+        print(query, ide_key)
 
         if ide_key is not None:
             projects.extend(self.get_recent_projects(ide_key))

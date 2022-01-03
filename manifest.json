@@ -5,7 +5,7 @@
   "developer_name": "Krzysztof Saczuk, Bruno Paz, pwnyprod",
   "icon": "images/icon.svg",
   "options": {
-    "query_debounce": 0.1
+    "query_debounce": 0.5
   },
   "preferences": [
     {
