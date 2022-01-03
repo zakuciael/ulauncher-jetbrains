@@ -1,29 +1,35 @@
 """
 Ulauncher extension for opening recent projects on Jetbrains IDEs.
 """
+import logging
 import os
 import re
+from logging import WARN, INFO
+
 import semver
 
-from ulauncher.api.client.EventListener import EventListener
 from ulauncher.api.client.Extension import Extension
 from ulauncher.api.shared.action.CopyToClipboardAction import CopyToClipboardAction
 from ulauncher.api.shared.action.HideWindowAction import HideWindowAction
 from ulauncher.api.shared.action.RenderResultListAction import RenderResultListAction
 from ulauncher.api.shared.action.RunScriptAction import RunScriptAction
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
-from ulauncher.api.shared.event import KeywordQueryEvent
+from ulauncher.api.shared.event import KeywordQueryEvent, PreferencesEvent, PreferencesUpdateEvent
 from ulauncher.utils.decorator.debounce import debounce
 from ulauncher.api.shared.Response import Response
+
+from events.keyword_query_event import KeywordQueryEventListener
+from events.preferences_event import PreferencesEventListener
+from events.preferences_update_event import PreferencesUpdateEventListener
 
 from utils.projects_parser import ProjectsParser
 from utils.projects_list import ProjectsList
 
 from typing_extensions import TYPE_CHECKING
-from typing import Optional, TypedDict
+from typing import Optional, TypedDict, cast, Match
 
 if TYPE_CHECKING:
-    from types.ide_types import IdeOptionsDict, IdeOptions, IdeKey
+    from types.ide_types import IdeOptionsDict, IdeOptions, IdeKey, IdeAliases
     from types.project import Project
 
 
@@ -38,10 +44,14 @@ class JetbrainsLauncherExtension(Extension):
         "webstorm": {"name": "WebStorm", "config_prefix": "WebStorm", "launcher_prefix": "webstorm"}
     }
 
+    aliases: 'IdeAliases' = {}
+
     def __init__(self):
         """ Initializes the extension """
         super(JetbrainsLauncherExtension, self).__init__()
         self.subscribe(KeywordQueryEvent, KeywordQueryEventListener())
+        self.subscribe(PreferencesEvent, PreferencesEventListener())
+        self.subscribe(PreferencesUpdateEvent, PreferencesUpdateEventListener())
 
     @staticmethod
     def get_base_icon():
@@ -55,7 +65,25 @@ class JetbrainsLauncherExtension(Extension):
 
         return path
 
-    def check_ide_key(self, key):
+    def parse_aliases(self, raw_aliases: str) -> list:
+        """
+        Parses raw aliases list into a python list
+        :param raw_aliases: Raw aliases list
+        """
+
+        if raw_aliases is None:
+            return []
+
+        matches: list[tuple[str, 'IdeKey']] = re.findall(r"(\w+):(?: +|)(\w+)*;", raw_aliases)
+
+        for alias, ide_key in matches:
+            if self.check_ide_key(ide_key):
+                self.aliases[alias] = ide_key
+                self.logger.log(INFO, f"Added alias for ide key {ide_key}, value: {alias}")
+            else:
+                self.logger.log(WARN, f"Invalid ide key specified for alias {alias}. Expected one of {self.ides.keys()}")
+
+    def check_ide_key(self, key: str) -> bool:
         """
         Checks if the provided key is an valid IDE key
         :param key: Key used to check validity
@@ -75,7 +103,7 @@ class JetbrainsLauncherExtension(Extension):
 
         return next((options for key, options in self.ides.items() if key == ide_key), None)
 
-    def get_recent_projects(self, ide_key) -> list['Project']:
+    def get_recent_projects(self, ide_key: 'IdeKey') -> list['Project']:
         """
         Returns the file path where the recent projects are stored
         :param ide_key: The IDE key
@@ -150,14 +178,14 @@ class JetbrainsLauncherExtension(Extension):
         return path
 
     @debounce(0.5)
-    def handle_query(self, event: KeywordQueryEvent, query: str, ide_key: Optional['IdeKey'] = None) -> None:
+    def handle_query(self, event: KeywordQueryEvent, query: str, ide_key: 'IdeKey | None') -> None:
         projects = ProjectsList(query, min_score=(60 if len(query) > 0 else 0), limit=8)
 
         if ide_key is not None:
             projects.extend(self.get_recent_projects(ide_key))
         else:
             for key in self.ides.keys():
-                projects.extend(self.get_recent_projects(key))
+                projects.extend(self.get_recent_projects(cast('IdeKey', key)))
 
         results = []
 
@@ -189,23 +217,6 @@ class JetbrainsLauncherExtension(Extension):
         finally:
             # Dirty way to send responses while using debouncing
             self._client.send(Response(event, RenderResultListAction(results)))
-
-
-class KeywordQueryEventListener(EventListener):
-    """ Listener that handles the user input """
-
-    def on_event(self, event, extension):
-        """
-        Handles the keyword event
-        @param KeywordQueryEvent event: Event object
-        @param JetbrainsLauncherExtension extension: Extension object
-        """
-
-        args = [arg.lower() for arg in re.split("[ /]+", (event.get_argument() or ""))]
-        ide_key = args[0] if extension.check_ide_key((args[0] if len(args) > 0 else "")) else None
-        query = " ".join(args[1:] if ide_key is not None else args).strip()
-
-        extension.handle_query(event, query, ide_key)
 
 
 if __name__ == "__main__":

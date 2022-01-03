@@ -9,5 +9,5 @@ class IdeOptions(TypedDict):
     launcher_prefix: str
 
 
-class IdeOptionsDict(TypedDict):
-    IdeKey: IdeOptions
+IdeOptionsDict = [IdeKey, IdeOptions]
+IdeAliases = dict[str, IdeKey]
