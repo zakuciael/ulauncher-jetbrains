@@ -31,6 +31,12 @@ It also adds improvements over the original project, most notably support for 20
   </a>
 </p>
 
+<p align="center">
+  <img alt="Extension Demo" src="https://raw.githubusercontent.com/zakuciael/ulauncher-jetbrains-reloaded/master/.github/demo.gif" width="800">
+</p>
+
+<br>
+
 ## Install
 
 ### Requirements
