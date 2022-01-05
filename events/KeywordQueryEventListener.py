@@ -9,13 +9,13 @@ from ulauncher.api.shared.action.CopyToClipboardAction import CopyToClipboardAct
 from ulauncher.api.shared.action.HideWindowAction import HideWindowAction
 from ulauncher.api.shared.action.RenderResultListAction import RenderResultListAction
 from ulauncher.api.shared.action.RunScriptAction import RunScriptAction
+from ulauncher.api.shared.event import KeywordQueryEvent
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 
-from utils.projects_list import ProjectsList
+from data.IdeKey import IdeKey
+from utils.ProjectsList import ProjectsList
 
 if TYPE_CHECKING:
-    from ulauncher.api.shared.event import KeywordQueryEvent
-    from ulauncher.api.shared.item import ResultItem
     from main import JetbrainsLauncherExtension
 
 
@@ -23,8 +23,8 @@ if TYPE_CHECKING:
 class KeywordQueryEventListener(EventListener):
     """ Handles users input and searches for results """
 
-    def on_event(self, event: 'KeywordQueryEvent', extension: 'JetbrainsLauncherExtension') -> \
-            'RenderResultListAction[ResultItem]':
+    def on_event(self, event: KeywordQueryEvent, extension: 'JetbrainsLauncherExtension') -> \
+            RenderResultListAction:
         """
         Handles the keyword event
         :param event: Event data
@@ -34,10 +34,10 @@ class KeywordQueryEventListener(EventListener):
 
         args = [arg.lower() for arg in re.split("[ /]+", (event.get_argument() or ""))]
         keyword = args[0] if len(args) > 0 else ""
-        ide_key: 'IdeKey | None' = None
+        ide_key: IdeKey | None = None
 
         if extension.check_ide_key(keyword):
-            ide_key = cast('IdeKey', keyword)
+            ide_key = cast(IdeKey, keyword)
         elif keyword in extension.aliases:
             ide_key = extension.aliases.get(keyword)
 
@@ -48,7 +48,7 @@ class KeywordQueryEventListener(EventListener):
             projects.extend(extension.get_recent_projects(ide_key))
         else:
             for key in extension.ides:
-                projects.extend(extension.get_recent_projects(cast('IdeKey', key)))
+                projects.extend(extension.get_recent_projects(cast(IdeKey, key)))
 
         results = []
 
@@ -66,15 +66,15 @@ class KeywordQueryEventListener(EventListener):
         for project in projects:
             results.append(
                 ExtensionResultItem(
-                    icon=project.get("icon") if project.get("icon") is not None else
-                    extension.get_ide_icon(project.get("ide")),
-                    name=project.get("name"),
-                    description=project.get("path"),
+                    icon=project.icon if project.icon is not None else
+                    extension.get_ide_icon(project.ide),
+                    name=project.name,
+                    description=project.path,
                     on_enter=RunScriptAction(
-                        extension.get_ide_launcher_script(project.get("ide")),
-                        [project.get("path"), "&"]
+                        extension.get_ide_launcher_script(project.ide),
+                        [project.path, "&"]
                     ),
-                    on_alt_enter=CopyToClipboardAction(project.get("path"))
+                    on_alt_enter=CopyToClipboardAction(project.path)
                 )
             )
 

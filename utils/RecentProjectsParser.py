@@ -3,24 +3,23 @@
 import glob
 import os
 from collections import OrderedDict
+from typing import Optional, cast
 from xml.etree import ElementTree
 
-from typing_extensions import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    # noinspection PyUnresolvedReferences
-    from types.project import Project
+from data.IdeKey import IdeKey
+from data.IdeProject import IdeProject
 
 
 # pylint: disable=too-few-public-methods
-class ProjectsParser:
+class RecentProjectsParser:
     """ Parser for JetBrains IDEs "Recent projects" files """
 
     @staticmethod
-    def parse(file_path: str) -> list['Project']:
+    def parse(file_path: str, ide_key: IdeKey) -> list[IdeProject]:
         """
         Parses the "Recent projects" file
         :param file_path: The path to the file
+        :param ide_key: IDE key identified with the file
         :return: Parsed projects
         """
 
@@ -62,11 +61,12 @@ class ProjectsParser:
 
             icons = glob.glob(os.path.join(os.path.expanduser(path), '.idea', 'icon.*'))
 
-            output.append({
-                'name': name or os.path.basename(path),
-                'path': path,
-                'icon': icons[0] if len(icons) > 0 else None,
-                'score': 0
-            })
+            output.append(IdeProject(
+                name=name or os.path.basename(path),
+                path=path,
+                icon=cast(Optional[str], icons[0] if len(icons) > 0 else None),
+                score=0,
+                ide=ide_key
+            ))
 
         return output

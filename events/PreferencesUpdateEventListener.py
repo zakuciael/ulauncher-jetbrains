@@ -2,9 +2,9 @@
 
 from typing_extensions import TYPE_CHECKING
 from ulauncher.api.client.EventListener import EventListener
+from ulauncher.api.shared.event import PreferencesUpdateEvent
 
 if TYPE_CHECKING:
-    from ulauncher.api.shared.event import PreferencesUpdateEvent
     from main import JetbrainsLauncherExtension
 
 
@@ -12,7 +12,8 @@ if TYPE_CHECKING:
 class PreferencesUpdateEventListener(EventListener):
     """ Handles updates to user settings and parses them """
 
-    def on_event(self, event: 'PreferencesUpdateEvent', extension: 'JetbrainsLauncherExtension'):
+    def on_event(self, event: PreferencesUpdateEvent, extension: 'JetbrainsLauncherExtension') -> \
+            None:
         """
         Handles the preference update event
         :param event: Event data
