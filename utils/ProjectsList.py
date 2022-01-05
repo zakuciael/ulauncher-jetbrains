@@ -23,7 +23,7 @@ class ProjectsList:
         self._query = query.lower().strip()
         self._min_score = min_score
         self._limit = limit
-        self._items = SortedCollection(key=lambda item: item.get("score"))
+        self._items = SortedCollection(key=lambda item: item.score)
 
     def __len__(self) -> int:
         return len(self._items)

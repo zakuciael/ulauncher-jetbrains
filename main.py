@@ -15,9 +15,6 @@ from events.PreferencesEventListener import PreferencesEventListener
 from events.PreferencesUpdateEventListener import PreferencesUpdateEventListener
 from utils.RecentProjectsParser import RecentProjectsParser
 
-IDE_VERSION_REGEX = re.compile(
-    r"(?P<major>0|[1-9]\d*)(\.(?P<minor>0|[1-9]\d*)(\.(?P<patch>0|[1-9]\d*))?)?")
-
 
 class JetbrainsLauncherExtension(Extension):
     """ Main Extension Class  """
@@ -113,7 +110,10 @@ class JetbrainsLauncherExtension(Extension):
 
         versions: list[semver.VersionInfo] = []
         for path in os.listdir(os.path.expanduser(base_path)):
-            match = re.match(rf'^{ide_data.config_prefix}{IDE_VERSION_REGEX}$', path)
+            match = re.match(
+                f"^{ide_data.config_prefix}" +
+                r"(?P<major>0|[1-9]\d*)(\.(?P<minor>0|[1-9]\d*)(\.(?P<patch>0|[1-9]\d*))?)?",
+                path)
 
             if match is not None:
                 version_dict = {
@@ -127,7 +127,8 @@ class JetbrainsLauncherExtension(Extension):
 
         version = max(versions)
         projects = RecentProjectsParser.parse(
-            os.path.join(os.path.expanduser(base_path), f"{version.major}.{version.minor}",
+            os.path.join(os.path.expanduser(base_path),
+                         f"{ide_data.config_prefix}{version.major}.{version.minor}",
                          "options", "recentProjects.xml"),
             ide_key
         )
