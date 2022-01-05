@@ -1,11 +1,9 @@
-"""
-Parses the Jetbrains based IDEs recent projects list
-"""
+""" Contains parser for JetBrains IDEs "Recent projects" files """
 
 import glob
 import os
-from xml.etree import ElementTree
 from collections import OrderedDict
+from xml.etree import ElementTree
 
 from typing_extensions import TYPE_CHECKING
 
@@ -14,14 +12,16 @@ if TYPE_CHECKING:
     from types.project import Project
 
 
+# pylint: disable=too-few-public-methods
 class ProjectsParser:
-    """ Processes the "Recent projects" file from Jetbrains IDEs """
+    """ Parser for JetBrains IDEs "Recent projects" files """
 
     @staticmethod
     def parse(file_path: str) -> list['Project']:
         """
-        Parses the recent projects file passed as argument and returns a list of projects
-        :param file_path: The path to the file which holds the recent projects data
+        Parses the "Recent projects" file
+        :param file_path: The path to the file
+        :return: Parsed projects
         """
 
         if not os.path.isfile(file_path):
@@ -29,13 +29,22 @@ class ProjectsParser:
 
         root = ElementTree.parse(file_path).getroot()
         recent_projects_manager_path = './/component[@name="RecentProjectsManager"][1]'
-        recent_directory_projects_manager_path = './/component[@name="RecentDirectoryProjectsManager"][1]'
+        recent_directory_projects_manager_path = \
+            './/component[@name="RecentDirectoryProjectsManager"][1]'
 
         raw_projects = \
-            root.findall('%s/option[@name="recentPaths"]/list/option' % recent_projects_manager_path) + \
-            root.findall('%s/option[@name="recentPaths"]/list/option' % recent_directory_projects_manager_path) + \
-            root.findall('%s/option[@name="additionalInfo"]/map/entry' % recent_projects_manager_path) + \
-            root.findall('%s/option[@name="additionalInfo"]/map/entry' % recent_directory_projects_manager_path)
+            root.findall(
+                f'{recent_projects_manager_path}/option[@name="recentPaths"]/list/option'
+            ) + \
+            root.findall(
+                f'{recent_directory_projects_manager_path}/option[@name="recentPaths"]/list/option'
+            ) + \
+            root.findall(
+                f'{recent_projects_manager_path}/option[@name="additionalInfo"]/map/entry'
+            ) + \
+            root.findall(
+                f'{recent_directory_projects_manager_path}/option[@name="additionalInfo"]/map/entry'
+            )
         project_paths = list(OrderedDict.fromkeys([
             (project.attrib['value' if 'value' in project.attrib else 'key']).replace(
                 "$USER_HOME$", "~"
@@ -48,7 +57,7 @@ class ProjectsParser:
             name = ''
 
             if os.path.exists(name_file):
-                with open(name_file, 'r') as file:
+                with open(name_file, 'r', encoding="utf8") as file:
                     name = file.read().replace('\n', '')
 
             icons = glob.glob(os.path.join(os.path.expanduser(path), '.idea', 'icon.*'))

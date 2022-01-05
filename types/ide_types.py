@@ -1,9 +1,12 @@
+""" Contains various IDE data types """
+
 from typing import Literal, TypedDict
 
 IdeKey = Literal["clion", "idea", "phpstorm", "pycharm", "rider", "webstorm"]
 
 
 class IdeOptions(TypedDict):
+    """ Dictionary describing ide options"""
     name: str
     config_prefix: str
     launcher_prefix: str

@@ -1,3 +1,5 @@
+""" Contains custom implementation of SortedList found in Ulauncher's code """
+
 from typing_extensions import TYPE_CHECKING
 from ulauncher.utils.SortedCollection import SortedCollection
 from ulauncher.utils.fuzzy_search import get_score
@@ -19,47 +21,54 @@ class ProjectsList:
     _limit: int
     _items: SortedCollection
 
-    def __init__(self, query, min_score=30, limit=9):
+    def __init__(self, query, min_score=30, limit=9) -> None:
         self._query = query.lower().strip()
         self._min_score = min_score
         self._limit = limit
         self._items = SortedCollection(key=lambda item: item.get("score"))
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._items)
 
-    def __getitem__(self, i):
+    def __getitem__(self, i) -> 'Project':
         return self._items[i]
 
-    def __iter__(self):
+    def __iter__(self) -> 'iter(Project)':
         return iter(self._items)
 
-    def __reversed__(self):
+    def __reversed__(self) -> 'reversed[Project]':
         return reversed(self._items)
 
-    def __repr__(self):
-        return '%s(%r, min_score=%s, limit=%s)' % (
-            self.__class__.__name__,
-            self._items,
-            self._min_score,
-            self._limit
-        )
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}" + \
+               f"({self._items}, min_score={self._min_score}, limit={self._limit})"
 
-    def __contains__(self, item):
+    def __contains__(self, item) -> bool:
         return item in self._items
 
-    def extend(self, items):
+    def extend(self, items: 'list[Project]') -> None:
+        """
+        Merges all provided items into this list
+        :param items: A list of items to merge
+        """
         for item in items:
             self.append(item)
 
-    def append(self, project: 'Project'):
-        name = project.get("name")
-        path = project.get("path").replace(r"^~", "")
+    def append(self, item: 'Project') -> None:
+        """
+        Adds item to the list
+        :param item: Item to add
+        """
+        name = item.get("name")
+        path = item.get("path").replace(r"^~", "")
 
         score = max(get_score(self._query, name), get_score(self._query, path))
 
         if score >= self._min_score:
-            project["score"] = -score  # use negative to sort by score in desc. order
-            self._items.insert(project)
+            # use negative to sort by score in desc. order
+            item["score"] = -score
+
+            self._items.insert(item)
             while len(self._items) > self._limit:
-                self._items.pop()  # remove items with the lowest score to maintain limited number of items
+                # remove items with the lowest score to maintain limited number of items
+                self._items.pop()

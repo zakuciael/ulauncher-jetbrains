@@ -1,3 +1,5 @@
+""" Contains class for handling preference update events from Ulauncher"""
+
 from typing_extensions import TYPE_CHECKING
 from ulauncher.api.client.EventListener import EventListener
 
@@ -6,14 +8,17 @@ if TYPE_CHECKING:
     from main import JetbrainsLauncherExtension
 
 
+# pylint: disable=too-few-public-methods
 class PreferencesUpdateEventListener(EventListener):
+    """ Handles updates to user settings and parses them """
+
     def on_event(self, event: 'PreferencesUpdateEvent', extension: 'JetbrainsLauncherExtension'):
         """
-        Updates preferences with the new value and parses aliases if needed
-        :param event: Event containing new values for a specific preference
-        :param extension: The extension to update
+        Handles the preference update event
+        :param event: Event data
+        :param extension: Extension class
         """
-        extension.preferences[event.id] = event.new_value
 
+        extension.preferences[event.id] = event.new_value
         if event.id == "custom_aliases":
             extension.parse_aliases(event.new_value)

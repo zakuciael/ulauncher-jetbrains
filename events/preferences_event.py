@@ -1,3 +1,5 @@
+""" Contains class for handling initial preference event from Ulauncher"""
+
 from typing_extensions import TYPE_CHECKING
 from ulauncher.api.client.EventListener import EventListener
 
@@ -6,12 +8,15 @@ if TYPE_CHECKING:
     from main import JetbrainsLauncherExtension
 
 
+# pylint: disable=too-few-public-methods
 class PreferencesEventListener(EventListener):
+    """ Handles initial user settings and parses them """
+
     def on_event(self, event: 'PreferencesEvent', extension: 'JetbrainsLauncherExtension'):
         """
-        Sets preferences on the initial run of the extension and updates the aliases list
-        :param event: Event containing all preferences
-        :param extension: The extension to update
+        Handles the preference event
+        :param event: Event data
+        :param extension: Extension class
         """
 
         extension.preferences.update(event.preferences)

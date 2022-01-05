@@ -1,3 +1,5 @@
+""" Contains class for handling keyword events from Ulauncher"""
+
 import re
 from typing import cast
 
@@ -7,16 +9,17 @@ from ulauncher.api.client.EventListener import EventListener
 if TYPE_CHECKING:
     from ulauncher.api.shared.event import KeywordQueryEvent
     from main import JetbrainsLauncherExtension
-    from types.ide_types import IdeKey
 
 
+# pylint: disable=too-few-public-methods
 class KeywordQueryEventListener(EventListener):
+    """ Handles users input and searches for results """
 
     def on_event(self, event: 'KeywordQueryEvent', extension: 'JetbrainsLauncherExtension'):
         """
         Handles the keyword event
-        :param event: Event object
-        :param extension: Extension object
+        :param event: Event data
+        :param extension: Extension class
         """
 
         args = [arg.lower() for arg in re.split("[ /]+", (event.get_argument() or ""))]

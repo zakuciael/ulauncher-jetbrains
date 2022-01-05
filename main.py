@@ -1,43 +1,41 @@
-"""
-Ulauncher extension for opening recent projects on Jetbrains IDEs.
-"""
-import logging
+""" Ulauncher extension for opening recent projects on Jetbrains IDEs. """
 import os
 import re
-from logging import WARN, INFO
+from typing import TypedDict, cast
 
 import semver
-
+from typing_extensions import TYPE_CHECKING
 from ulauncher.api.client.Extension import Extension
+from ulauncher.api.shared.Response import Response
 from ulauncher.api.shared.action.CopyToClipboardAction import CopyToClipboardAction
 from ulauncher.api.shared.action.HideWindowAction import HideWindowAction
 from ulauncher.api.shared.action.RenderResultListAction import RenderResultListAction
 from ulauncher.api.shared.action.RunScriptAction import RunScriptAction
-from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 from ulauncher.api.shared.event import KeywordQueryEvent, PreferencesEvent, PreferencesUpdateEvent
-from ulauncher.api.shared.Response import Response
+from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 
 from events.keyword_query_event import KeywordQueryEventListener
 from events.preferences_event import PreferencesEventListener
 from events.preferences_update_event import PreferencesUpdateEventListener
-
-from utils.projects_parser import ProjectsParser
 from utils.projects_list import ProjectsList
-
-from typing_extensions import TYPE_CHECKING
-from typing import Optional, TypedDict, cast, Match
+from utils.projects_parser import ProjectsParser
 
 if TYPE_CHECKING:
-    from types.ide_types import IdeOptionsDict, IdeOptions, IdeKey, IdeAliases
+    from types.ide_types import IdeOptionsDict, IdeKey, IdeAliases
     from types.project import Project
+
+IDE_VERSION_REGEX = re.compile(
+    r"(?P<major>0|[1-9]\d*)(\.(?P<minor>0|[1-9]\d*)(\.(?P<patch>0|[1-9]\d*))?)?")
 
 
 class JetbrainsLauncherExtension(Extension):
     """ Main Extension Class  """
     ides: 'IdeOptionsDict' = {
         "clion": {"name": "CLion", "config_prefix": "CLion", "launcher_prefix": "clion"},
-        "idea": {"name": "IntelliJ IDEA", "config_prefix": "IntelliJIdea", "launcher_prefix": "idea"},
-        "phpstorm": {"name": "PHPStorm", "config_prefix": "PHPStorm", "launcher_prefix": "phpstorm"},
+        "idea": {"name": "IntelliJ IDEA", "config_prefix": "IntelliJIdea",
+                 "launcher_prefix": "idea"},
+        "phpstorm": {"name": "PHPStorm", "config_prefix": "PHPStorm",
+                     "launcher_prefix": "phpstorm"},
         "pycharm": {"name": "PyCharm", "config_prefix": "PyCharm", "launcher_prefix": "pycharm"},
         "rider": {"name": "Rider", "config_prefix": "Rider", "launcher_prefix": "rider"},
         "webstorm": {"name": "WebStorm", "config_prefix": "WebStorm", "launcher_prefix": "webstorm"}
@@ -47,7 +45,7 @@ class JetbrainsLauncherExtension(Extension):
 
     def __init__(self):
         """ Initializes the extension """
-        super(JetbrainsLauncherExtension, self).__init__()
+        super().__init__()
         self.subscribe(KeywordQueryEvent, KeywordQueryEventListener())
         self.subscribe(PreferencesEvent, PreferencesEventListener())
         self.subscribe(PreferencesUpdateEvent, PreferencesUpdateEventListener())
@@ -56,31 +54,34 @@ class JetbrainsLauncherExtension(Extension):
     def get_base_icon():
         """
         Returns the base (project) icon
+        :return: None
         """
 
         path = os.path.join(os.path.dirname(__file__), "images", "icon.svg")
         if path is None or not os.path.isfile(path):
-            raise FileNotFoundError(f"Cant find base icon")
+            raise FileNotFoundError("Cant find base icon")
 
         return path
 
-    def parse_aliases(self, raw_aliases: str) -> list:
+    def parse_aliases(self, raw_aliases: str) -> None:
         """
         Parses raw aliases list into a python list
         :param raw_aliases: Raw aliases list
         """
 
         if raw_aliases is None:
-            return []
+            return
 
-        matches: list[tuple[str, 'IdeKey']] = re.findall(r"(\w+):(?: +|)(\w+)*;", raw_aliases)
+        matches: list[tuple[str, str]] = re.findall(r"(\w+):(?: +|)(\w+)*;", raw_aliases)
 
         for alias, ide_key in matches:
             if self.check_ide_key(ide_key):
-                self.aliases[alias] = ide_key
-                self.logger.log(INFO, f"Added alias for ide key {ide_key}, value: {alias}")
+                self.aliases[alias] = cast('IdeKey', ide_key)
+                self.logger.info("Loaded alias: %s -> %s", ide_key, alias)
             else:
-                self.logger.log(WARN, f"Invalid ide key specified for alias {alias}. Expected one of {self.ides.keys()}")
+                self.logger.warning(
+                    "Invalid ide key specified for alias %s. Expected one of %s",
+                    alias, ", ".join(self.ides.keys()))
 
     def check_ide_key(self, key: str) -> bool:
         """
@@ -89,7 +90,7 @@ class JetbrainsLauncherExtension(Extension):
         :type key: str
         """
 
-        return True if key in self.ides.keys() else False
+        return key in self.ides
 
     def get_ide_options(self, ide_key) -> 'IdeOptions | None':
         """
@@ -118,7 +119,7 @@ class JetbrainsLauncherExtension(Extension):
 
         configs: list[TypedDict("Config", {"path": str, "version": semver.VersionInfo})] = []
         for path in os.listdir(os.path.expanduser(base_path)):
-            match = re.match(rf'^{ide_options.get("config_prefix")}(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)$', path)
+            match = re.match(rf'^{ide_options.get("config_prefix")}{IDE_VERSION_REGEX}$', path)
 
             if match is not None:
                 version_dict = {
@@ -134,7 +135,8 @@ class JetbrainsLauncherExtension(Extension):
             return []
 
         config = max(configs, key=lambda conf: conf.get("version"))
-        projects = ProjectsParser.parse(os.path.join(config.get("path"), "options", "recentProjects.xml"))
+        projects = ProjectsParser.parse(
+            os.path.join(config.get("path"), "options", "recentProjects.xml"))
 
         for project in projects:
             project["ide"] = ide_key
@@ -176,7 +178,7 @@ class JetbrainsLauncherExtension(Extension):
 
         return path
 
-    # @debounce(0.5)
+    # pylint: disable=missing-function-docstring
     def handle_query(self, event: KeywordQueryEvent, query: str, ide_key: 'IdeKey | None') -> None:
         projects = ProjectsList(query, min_score=(60 if len(query) > 0 else 0), limit=8)
 
@@ -185,7 +187,7 @@ class JetbrainsLauncherExtension(Extension):
         if ide_key is not None:
             projects.extend(self.get_recent_projects(ide_key))
         else:
-            for key in self.ides.keys():
+            for key in self.ides:
                 projects.extend(self.get_recent_projects(cast('IdeKey', key)))
 
         results = []
@@ -194,7 +196,8 @@ class JetbrainsLauncherExtension(Extension):
             if len(projects) == 0:
                 results.append(
                     ExtensionResultItem(
-                        icon=self.get_ide_icon(ide_key) if ide_key is not None else self.get_base_icon(),
+                        icon=self.get_ide_icon(
+                            ide_key) if ide_key is not None else self.get_base_icon(),
                         name="No projects found",
                         on_enter=HideWindowAction()
                     )
