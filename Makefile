@@ -2,7 +2,7 @@ PORT_REGEX := ^[0-9]+([.][0-9]+)?$
 EXT_NAME:=com.github.zakuciael.ulauncher-jetbrains-reloaded
 EXT_DIR:=$(shell pwd)
 
-.PHONY: help lint format link unlink deps dev setup
+.PHONY: help link unlink deps start dev
 .DEFAULT_GOAL := help
 
 link: ## Symlink the project source directory with Ulauncher extensions dir.
