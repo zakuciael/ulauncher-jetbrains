@@ -5,9 +5,17 @@ from typing import cast
 
 from typing_extensions import TYPE_CHECKING
 from ulauncher.api.client.EventListener import EventListener
+from ulauncher.api.shared.action.CopyToClipboardAction import CopyToClipboardAction
+from ulauncher.api.shared.action.HideWindowAction import HideWindowAction
+from ulauncher.api.shared.action.RenderResultListAction import RenderResultListAction
+from ulauncher.api.shared.action.RunScriptAction import RunScriptAction
+from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
+
+from utils.projects_list import ProjectsList
 
 if TYPE_CHECKING:
     from ulauncher.api.shared.event import KeywordQueryEvent
+    from ulauncher.api.shared.item import ResultItem
     from main import JetbrainsLauncherExtension
 
 
@@ -15,11 +23,13 @@ if TYPE_CHECKING:
 class KeywordQueryEventListener(EventListener):
     """ Handles users input and searches for results """
 
-    def on_event(self, event: 'KeywordQueryEvent', extension: 'JetbrainsLauncherExtension'):
+    def on_event(self, event: 'KeywordQueryEvent', extension: 'JetbrainsLauncherExtension') -> \
+            'RenderResultListAction[ResultItem]':
         """
         Handles the keyword event
         :param event: Event data
         :param extension: Extension class
+        :return: List of actions to render
         """
 
         args = [arg.lower() for arg in re.split("[ /]+", (event.get_argument() or ""))]
@@ -32,5 +42,40 @@ class KeywordQueryEventListener(EventListener):
             ide_key = extension.aliases.get(keyword)
 
         query = " ".join(args[1:] if ide_key is not None else args).strip()
+        projects = ProjectsList(query, min_score=(60 if len(query) > 0 else 0), limit=8)
 
-        extension.handle_query(event, query, ide_key)
+        if ide_key is not None:
+            projects.extend(extension.get_recent_projects(ide_key))
+        else:
+            for key in extension.ides:
+                projects.extend(extension.get_recent_projects(cast('IdeKey', key)))
+
+        results = []
+
+        if len(projects) == 0:
+            results.append(
+                ExtensionResultItem(
+                    icon=extension.get_ide_icon(
+                        ide_key) if ide_key is not None else extension.get_base_icon(),
+                    name="No projects found",
+                    on_enter=HideWindowAction()
+                )
+            )
+            return RenderResultListAction(results)
+
+        for project in projects:
+            results.append(
+                ExtensionResultItem(
+                    icon=project.get("icon") if project.get("icon") is not None else
+                    extension.get_ide_icon(project.get("ide")),
+                    name=project.get("name"),
+                    description=project.get("path"),
+                    on_enter=RunScriptAction(
+                        extension.get_ide_launcher_script(project.get("ide")),
+                        [project.get("path"), "&"]
+                    ),
+                    on_alt_enter=CopyToClipboardAction(project.get("path"))
+                )
+            )
+
+        return RenderResultListAction(results)

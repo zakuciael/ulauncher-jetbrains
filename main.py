@@ -6,18 +6,11 @@ from typing import TypedDict, cast
 import semver
 from typing_extensions import TYPE_CHECKING
 from ulauncher.api.client.Extension import Extension
-from ulauncher.api.shared.Response import Response
-from ulauncher.api.shared.action.CopyToClipboardAction import CopyToClipboardAction
-from ulauncher.api.shared.action.HideWindowAction import HideWindowAction
-from ulauncher.api.shared.action.RenderResultListAction import RenderResultListAction
-from ulauncher.api.shared.action.RunScriptAction import RunScriptAction
 from ulauncher.api.shared.event import KeywordQueryEvent, PreferencesEvent, PreferencesUpdateEvent
-from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 
 from events.keyword_query_event import KeywordQueryEventListener
 from events.preferences_event import PreferencesEventListener
 from events.preferences_update_event import PreferencesUpdateEventListener
-from utils.projects_list import ProjectsList
 from utils.projects_parser import ProjectsParser
 
 if TYPE_CHECKING:
@@ -177,50 +170,6 @@ class JetbrainsLauncherExtension(Extension):
             raise FileNotFoundError(f"Cant find {ide_key} launcher script")
 
         return path
-
-    # pylint: disable=missing-function-docstring
-    def handle_query(self, event: KeywordQueryEvent, query: str, ide_key: 'IdeKey | None') -> None:
-        projects = ProjectsList(query, min_score=(60 if len(query) > 0 else 0), limit=8)
-
-        print(query, ide_key)
-
-        if ide_key is not None:
-            projects.extend(self.get_recent_projects(ide_key))
-        else:
-            for key in self.ides:
-                projects.extend(self.get_recent_projects(cast('IdeKey', key)))
-
-        results = []
-
-        try:
-            if len(projects) == 0:
-                results.append(
-                    ExtensionResultItem(
-                        icon=self.get_ide_icon(
-                            ide_key) if ide_key is not None else self.get_base_icon(),
-                        name="No projects found",
-                        on_enter=HideWindowAction()
-                    )
-                )
-                return
-
-            for project in projects:
-                results.append(
-                    ExtensionResultItem(
-                        icon=project.get("icon") if project.get("icon") is not None else
-                        self.get_ide_icon(project.get("ide")),
-                        name=project.get("name"),
-                        description=project.get("path"),
-                        on_enter=RunScriptAction(
-                            self.get_ide_launcher_script(project.get("ide")),
-                            [project.get("path"), "&"]
-                        ),
-                        on_alt_enter=CopyToClipboardAction(project.get("path"))
-                    )
-                )
-        finally:
-            # Dirty way to send responses while using debouncing
-            self._client.send(Response(event, RenderResultListAction(results)))
 
 
 if __name__ == "__main__":
