@@ -1,7 +1,9 @@
 """ Ulauncher extension for opening recent projects on Jetbrains IDEs. """
+from __future__ import annotations
+
 import os
 import re
-from typing import cast
+from typing import Dict, cast
 
 import semver
 from ulauncher.api.client.Extension import Extension
@@ -18,7 +20,7 @@ from utils.RecentProjectsParser import RecentProjectsParser
 
 class JetbrainsLauncherExtension(Extension):
     """ Main Extension Class  """
-    ides: dict[IdeKey, IdeData] = {
+    ides: Dict[IdeKey, IdeData] = {
         "clion": IdeData(name="CLion", config_prefix="CLion", launcher_prefix="clion"),
         "idea": IdeData(name="IntelliJ IDEA", config_prefix="IntelliJIdea",
                         launcher_prefix="idea"),
@@ -30,7 +32,7 @@ class JetbrainsLauncherExtension(Extension):
                             launcher_prefix="webstorm")
     }
 
-    aliases: dict[str, IdeKey] = {}
+    aliases: Dict[str, IdeKey] = {}
 
     def __init__(self):
         """ Initializes the extension """
@@ -61,7 +63,7 @@ class JetbrainsLauncherExtension(Extension):
         if raw_aliases is None:
             return
 
-        matches = cast(list[tuple[str, str]], re.findall(r"(\w+):(?: +|)(\w+)*;", raw_aliases))
+        matches = re.findall(r"(\w+):(?: +|)(\w+)*;", raw_aliases)
 
         for alias, ide_key in matches:
             if self.check_ide_key(ide_key):

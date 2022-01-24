@@ -1,4 +1,5 @@
 """ Contains project type """
+from __future__ import annotations
 
 from data.IdeKey import IdeKey
 
