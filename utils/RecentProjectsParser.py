@@ -52,14 +52,15 @@ class RecentProjectsParser:
 
         output = []
         for path in project_paths:
-            name_file = path + '/.idea/.name'
+            full_path = os.path.expanduser(path)
+            name_file = full_path + '/.idea/.name'
             name = ''
 
             if os.path.exists(name_file):
                 with open(name_file, 'r', encoding="utf8") as file:
                     name = file.read().replace('\n', '')
 
-            icons = glob.glob(os.path.join(os.path.expanduser(path), '.idea', 'icon.*'))
+            icons = glob.glob(os.path.join(full_path, '.idea', 'icon.*'))
 
             output.append(IdeProject(
                 name=name or os.path.basename(path),
