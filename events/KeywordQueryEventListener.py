@@ -71,7 +71,7 @@ class KeywordQueryEventListener(EventListener):
                     name=project.name,
                     description=project.path,
                     on_enter=RunScriptAction(
-                        '{} "{}" &'.format(extension.get_ide_launcher_script(project.ide), project.path)
+                        f'{extension.get_ide_launcher_script(project.ide)} "{project.path}" &'
                     ),
                     on_alt_enter=CopyToClipboardAction(project.path)
                 )
