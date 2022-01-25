@@ -1,5 +1,6 @@
 """ Contains class for handling keyword events from Ulauncher"""
 
+import os
 import re
 from typing import cast
 
@@ -71,7 +72,8 @@ class KeywordQueryEventListener(EventListener):
                     name=project.name,
                     description=project.path,
                     on_enter=RunScriptAction(
-                        f'{extension.get_ide_launcher_script(project.ide)} "{project.path}" &'
+                        extension.get_ide_launcher_script(project.ide) +
+                        f' "{os.path.expanduser(project.path)}" &'
                     ),
                     on_alt_enter=CopyToClipboardAction(project.path)
                 )
