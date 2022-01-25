@@ -1,10 +1,8 @@
 """ Contains IdeData class """
-
-
-# pylint: disable=too-few-public-methods
 from typing import List
 
 
+# pylint: disable=too-few-public-methods
 class IdeData:
     """ Class describing ide options"""
     name: str
