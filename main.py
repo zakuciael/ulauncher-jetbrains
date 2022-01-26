@@ -1,7 +1,9 @@
 """ Ulauncher extension for opening recent projects on Jetbrains IDEs. """
+from __future__ import annotations
+
 import os
 import re
-from typing import cast
+from typing import Dict, cast
 
 import semver
 from ulauncher.api.client.Extension import Extension
@@ -18,19 +20,20 @@ from utils.RecentProjectsParser import RecentProjectsParser
 
 class JetbrainsLauncherExtension(Extension):
     """ Main Extension Class  """
-    ides: dict[IdeKey, IdeData] = {
-        "clion": IdeData(name="CLion", config_prefix="CLion", launcher_prefix="clion"),
+    ides: Dict[IdeKey, IdeData] = {
+        "clion": IdeData(name="CLion", config_prefix="CLion", launcher_prefixes=["clion"]),
         "idea": IdeData(name="IntelliJ IDEA", config_prefix="IntelliJIdea",
-                        launcher_prefix="idea"),
+                        launcher_prefixes=["idea"]),
         "phpstorm": IdeData(name="PHPStorm", config_prefix="PHPStorm",
-                            launcher_prefix="phpstorm"),
-        "pycharm": IdeData(name="PyCharm", config_prefix="PyCharm", launcher_prefix="pycharm"),
-        "rider": IdeData(name="Rider", config_prefix="Rider", launcher_prefix="rider"),
+                            launcher_prefixes=["phpstorm"]),
+        "pycharm": IdeData(name="PyCharm", config_prefix="PyCharm",
+                           launcher_prefixes=["pycharm", "charm"]),
+        "rider": IdeData(name="Rider", config_prefix="Rider", launcher_prefixes=["rider"]),
         "webstorm": IdeData(name="WebStorm", config_prefix="WebStorm",
-                            launcher_prefix="webstorm")
+                            launcher_prefixes=["webstorm"])
     }
 
-    aliases: dict[str, IdeKey] = {}
+    aliases: Dict[str, IdeKey] = {}
 
     def __init__(self):
         """ Initializes the extension """
@@ -61,7 +64,7 @@ class JetbrainsLauncherExtension(Extension):
         if raw_aliases is None:
             return
 
-        matches = cast(list[tuple[str, str]], re.findall(r"(\w+):(?: +|)(\w+)*;", raw_aliases))
+        matches = re.findall(r"(\w+):(?: +|)(\w+)*;", raw_aliases)
 
         for alias, ide_key in matches:
             if self.check_ide_key(ide_key):
@@ -151,7 +154,7 @@ class JetbrainsLauncherExtension(Extension):
 
         return path
 
-    def get_ide_launcher_script(self, ide_key: IdeKey) -> str:
+    def get_ide_launcher_script(self, ide_key: IdeKey) -> str | None:
         """
         Gets path to the IDE launcher script for specified key
         :param ide_key: IDE key
@@ -166,11 +169,12 @@ class JetbrainsLauncherExtension(Extension):
         if ide_data is None:
             raise AttributeError("Invalid ide key specified")
 
-        path = os.path.join(os.path.expanduser(scripts_path), ide_data.launcher_prefix)
-        if path is None or not os.path.isfile(path):
-            raise FileNotFoundError(f"Cant find {ide_key} launcher script")
+        for prefix in ide_data.launcher_prefixes:
+            path = os.path.join(os.path.expanduser(scripts_path), prefix)
+            if path is not None and os.path.isfile(path):
+                return path
 
-        return path
+        return None
 
 
 if __name__ == "__main__":

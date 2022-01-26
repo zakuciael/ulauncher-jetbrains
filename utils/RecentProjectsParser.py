@@ -3,7 +3,7 @@
 import glob
 import os
 from collections import OrderedDict
-from typing import Optional, cast
+from typing import Optional, cast, List
 from xml.etree import ElementTree
 
 from data.IdeKey import IdeKey
@@ -15,7 +15,7 @@ class RecentProjectsParser:
     """ Parser for JetBrains IDEs "Recent projects" files """
 
     @staticmethod
-    def parse(file_path: str, ide_key: IdeKey) -> list[IdeProject]:
+    def parse(file_path: str, ide_key: IdeKey) -> List[IdeProject]:
         """
         Parses the "Recent projects" file
         :param file_path: The path to the file
