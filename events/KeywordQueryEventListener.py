@@ -1,4 +1,5 @@
 """ Contains class for handling keyword events from Ulauncher"""
+from __future__ import annotations
 
 import os
 import re
