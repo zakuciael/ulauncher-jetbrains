@@ -26,7 +26,8 @@ class JetbrainsLauncherExtension(Extension):
                         launcher_prefixes=["idea"]),
         "phpstorm": IdeData(name="PHPStorm", config_prefix="PHPStorm",
                             launcher_prefixes=["phpstorm"]),
-        "pycharm": IdeData(name="PyCharm", config_prefix="PyCharm", launcher_prefixes=["pycharm", "charm"]),
+        "pycharm": IdeData(name="PyCharm", config_prefix="PyCharm",
+                           launcher_prefixes=["pycharm", "charm"]),
         "rider": IdeData(name="Rider", config_prefix="Rider", launcher_prefixes=["rider"]),
         "webstorm": IdeData(name="WebStorm", config_prefix="WebStorm",
                             launcher_prefixes=["webstorm"])
@@ -153,7 +154,7 @@ class JetbrainsLauncherExtension(Extension):
 
         return path
 
-    def get_ide_launcher_script(self, ide_key: IdeKey) -> str:
+    def get_ide_launcher_script(self, ide_key: IdeKey) -> str | None:
         """
         Gets path to the IDE launcher script for specified key
         :param ide_key: IDE key
@@ -173,7 +174,7 @@ class JetbrainsLauncherExtension(Extension):
             if path is not None and os.path.isfile(path):
                 return path
 
-        raise FileNotFoundError(f"Cant find {ide_key} launcher script")
+        return None
 
 
 if __name__ == "__main__":
