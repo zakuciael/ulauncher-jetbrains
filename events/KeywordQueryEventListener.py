@@ -48,7 +48,7 @@ class KeywordQueryEventListener(EventListener):
 
         if ide_key is not None and extension.get_ide_launcher_script(ide_key):
             projects.extend(extension.get_recent_projects(ide_key))
-        else:
+        elif ide_key is None:
             for key in [key for key in extension.ides if extension.get_ide_launcher_script(key)]:
                 projects.extend(extension.get_recent_projects(cast(IdeKey, key)))
 
