@@ -1,6 +1,6 @@
 """ Contains class for handling keyword events from Ulauncher"""
-from __future__ import annotations
 
+import os
 import re
 from typing import cast
 
@@ -65,25 +65,18 @@ class KeywordQueryEventListener(EventListener):
             return RenderResultListAction(results)
 
         for project in projects:
-            try:
-                results.append(
-                    ExtensionResultItem(
-                        icon=project.icon if project.icon is not None else
-                        extension.get_ide_icon(project.ide),
-                        name=project.name,
-                        description=project.path,
-                        on_enter=RunScriptAction(
-                            extension.get_ide_launcher_script(project.ide),
-                            [project.path, "&"]
-                        ),
-                        on_alt_enter=CopyToClipboardAction(project.path)
-                    )
-                )
-            except FileNotFoundError:
-                results.append(ExtensionResultItem(
+            results.append(
+                ExtensionResultItem(
+                    icon=project.icon if project.icon is not None else
+                    extension.get_ide_icon(project.ide),
                     name=project.name,
-                    description="Couldn't find launcher \"{}\" for this project".format(project.ide)
-                ))
-                pass
+                    description=project.path,
+                    on_enter=RunScriptAction(
+                        extension.get_ide_launcher_script(project.ide) +
+                        f' "{os.path.expanduser(project.path)}" &'
+                    ),
+                    on_alt_enter=CopyToClipboardAction(project.path)
+                )
+            )
 
         return RenderResultListAction(results)
