@@ -46,24 +46,37 @@ class KeywordQueryEventListener(EventListener):
         query = " ".join(args[1:] if ide_key is not None else args).strip()
         projects = ProjectsList(query, min_score=(60 if len(query) > 0 else 0), limit=8)
 
-        if ide_key is not None and extension.get_ide_launcher_script(ide_key):
-            projects.extend(extension.get_recent_projects(ide_key))
-        elif ide_key is None:
-            for key in [key for key in extension.ides if extension.get_ide_launcher_script(key)]:
-                projects.extend(extension.get_recent_projects(cast(IdeKey, key)))
+        try:
+            if ide_key is not None:
+                if not extension.get_ide_launcher_script(ide_key):
+                    return self.make_error(
+                        extension=extension,
+                        title="IDE launcher not found",
+                        desc="Please verify that you have the IDE installed.",
+                        ide_key=ide_key
+                    )
+
+                projects.extend(extension.get_recent_projects(ide_key))
+            else:
+                for key in [key for key in extension.ides if
+                            extension.get_ide_launcher_script(key)]:
+                    projects.extend(extension.get_recent_projects(cast(IdeKey, key)))
+        except FileNotFoundError:
+            return self.make_error(
+                extension=extension,
+                title="Unable to find IDE configuration",
+                desc="Make sure that you provided a valid path to the IDE config directory.",
+                ide_key=ide_key
+            )
 
         results = []
 
         if len(projects) == 0:
-            results.append(
-                ExtensionResultItem(
-                    icon=extension.get_ide_icon(
-                        ide_key) if ide_key is not None else extension.get_base_icon(),
-                    name="No projects found",
-                    on_enter=HideWindowAction()
-                )
+            return self.make_error(
+                extension=extension,
+                title="No projects found",
+                ide_key=ide_key
             )
-            return RenderResultListAction(results)
 
         for project in projects:
             results.append(
@@ -81,3 +94,25 @@ class KeywordQueryEventListener(EventListener):
             )
 
         return RenderResultListAction(results)
+
+    @staticmethod
+    def make_error(extension: 'JetbrainsLauncherExtension', title: str,
+                   desc: str | None = None, ide_key: IdeKey | None = None):
+        """
+        Create an error in form of ExtensionResultItem
+        :param extension: Extension class
+        :param title: The title of the error
+        :param desc: The description of the error
+        :param ide_key: The IDE key
+        :return RenderResultListAction with the error inside
+        """
+
+        return RenderResultListAction([
+            ExtensionResultItem(
+                icon=extension.get_ide_icon(ide_key) \
+                    if ide_key is not None else extension.get_base_icon(),
+                name=title,
+                description=desc,
+                on_enter=HideWindowAction()
+            )
+        ])

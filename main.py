@@ -120,7 +120,7 @@ class JetbrainsLauncherExtension(Extension):
                 if ide_data.custom_config_key else self.preferences.get("configs_path")
         )
         if base_path is None or not os.path.isdir(base_path):
-            raise AttributeError("Cant find configs directory")
+            raise FileNotFoundError("Cant find configs directory")
 
         versions: list[semver.VersionInfo] = []
         for path in os.listdir(base_path):
