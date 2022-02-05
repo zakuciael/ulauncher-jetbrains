@@ -34,7 +34,11 @@ class JetbrainsLauncherExtension(Extension):
         "goland": IdeData(name="GoLand", config_prefix="GoLand", launcher_prefixes=["goland"]),
         "datagrip": IdeData(name="DataGrip", config_prefix="DataGrip",
                             launcher_prefixes=["datagrip"]),
-
+        "rubymine": IdeData(name="RubyMine", config_prefix="RubyMine",
+                            launcher_prefixes=["rubymine"]),
+        "android-studio": IdeData(name="Android Studio", config_prefix="AndroidStudio",
+                                  launcher_prefixes=["studio"],
+                                  custom_config_key="studio_config_path")
     }
 
     aliases: Dict[str, IdeKey] = {}
