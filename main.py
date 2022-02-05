@@ -72,7 +72,7 @@ class JetbrainsLauncherExtension(Extension):
         if raw_aliases is None:
             return
 
-        matches = re.findall(r"(\w+):(?: +|)(\w+)*;", raw_aliases)
+        matches = re.findall(r"(\w+):(?: +|)([\w-]+)*;", raw_aliases)
 
         for alias, ide_key in matches:
             if self.check_ide_key(ide_key):
