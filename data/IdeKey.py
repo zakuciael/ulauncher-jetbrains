@@ -2,4 +2,4 @@
 
 from typing import Literal
 
-IdeKey = Literal["clion", "idea", "phpstorm", "pycharm", "rider", "webstorm"]
+IdeKey = Literal["clion", "idea", "phpstorm", "pycharm", "rider", "webstorm", "goland", "datagrip"]
