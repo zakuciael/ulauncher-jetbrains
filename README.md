@@ -10,14 +10,16 @@
 
 <h6 align="center">Overview</h6>
 <h4 align="center">
-<a href="https://ulauncher.io/" target="_blank">Ulauncher</a> extension that let's you open your projects in <a href="https://www.jetbrains.com/products/" target="_blank">JetBrains IDEs</a>
+<a href="https://ulauncher.io/" target="_blank">Ulauncher</a> extension that let's you open your
+projects in <a href="https://www.jetbrains.com/products/" target="_blank">JetBrains IDEs</a>
 </h4>
 
 <h5 align="center">
 This project is a fork of the extension called <a href="https://github.com/brpaz/ulauncher-jetbrains" target="_blank">ulauncher-jetbrains</a> made by <a href="https://github.com/brpaz" target="_blank">Bruno Paz</a>.<br>
 
 It adds new features such as fuzzy project search, multi-ide queries and custom ide aliases;<br>
-It also adds improvements over the original project, most notably support for 2021.3 versions of IDEs and better preferences settings.
+It also adds improvements over the original project, most notably support for 2021.3 versions of
+IDEs and better preferences settings.
 </h5>
 
 <p align="center">
@@ -42,13 +44,17 @@ It also adds improvements over the original project, most notably support for 20
 ### Requirements
 
 #### Programs
+
 - Ulauncher 5
 - Python 3
 - Jetbrains IDE
+
 #### Packages
+
 - semver >=2.13.0
 
 To install this extension:
+
 1. Install required packages
 2. Open `Preferences` window
 3. Select `Extensions` tab
@@ -65,8 +71,12 @@ To install this extension:
 - IntelliJ IDEA
 - CLion
 - Rider
+- GoLand
+- DataGrip
 
-To use this extension first **generate shell scripts** in the JetBrains Toolbox app by doing the following:
+To use this extension first **generate shell scripts** in the JetBrains Toolbox app by doing the
+following:
+
 1. Open JetBrains Toolbox app
 2. Go to settings
 3. Click on the `Tools` dropdown
@@ -74,16 +84,19 @@ To use this extension first **generate shell scripts** in the JetBrains Toolbox 
 5. Enter the shell scripts location
 
 After that, follow below instructions to configure the extension settings:
+
 1. Open `Preferences` window
 2. Select `Extensions` tab
 3. Click on `JetBrains Launcher` extension
-4. Set the `Shell scripts location` value to the path configured in the JetBrains Toolbox app 
-5. Set the `Configs location` value to the folder in which JetBrains IDEs store their configurations  
-    **Default location:** ``~/.config/JetBrains/``
+4. Set the `Shell scripts location` value to the path configured in the JetBrains Toolbox app
+5. Set the `Configs location` value to the folder in which JetBrains IDEs store their
+   configurations  
+   **Default location:** ``~/.config/JetBrains/``
 
 ## Contributing
 
 Clone this repository and run:
+
 ```bash
 make link
 ```
@@ -104,7 +117,9 @@ In another terminal run `make PORT=<PORT> start` command to run the extension ba
 To see your changes, CTRL+C the previous command and run it again to refresh.
 
 ## Credits
+
 [Bruno Paz](https://github.com/brpaz) - Original author
 
 ## License
+
 MIT © [Krzysztof Saczuk \<zakku@zakku.eu\>](https://github.com/zakuciael)
