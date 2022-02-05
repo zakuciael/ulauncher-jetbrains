@@ -107,16 +107,19 @@ class JetbrainsLauncherExtension(Extension):
         :return: Parsed recent projects
         """
 
-        base_path = self.preferences.get("configs_path")
-        if base_path is None or not os.path.isdir(os.path.expanduser(base_path)):
-            raise AttributeError("Cant find configs directory")
-
         ide_data = self.get_ide_data(ide_key)
         if ide_data is None:
             raise AttributeError("Invalid ide key specified")
 
+        base_path = os.path.expanduser(
+            self.preferences.get(ide_data.custom_config_key) \
+                if ide_data.custom_config_key else self.preferences.get("configs_path")
+        )
+        if base_path is None or not os.path.isdir(base_path):
+            raise AttributeError("Cant find configs directory")
+
         versions: list[semver.VersionInfo] = []
-        for path in os.listdir(os.path.expanduser(base_path)):
+        for path in os.listdir(base_path):
             match = re.match(
                 f"^{ide_data.config_prefix}" +
                 r"(?P<major>0|[1-9]\d*)(\.(?P<minor>0|[1-9]\d*)(\.(?P<patch>0|[1-9]\d*))?)?",
@@ -134,8 +137,7 @@ class JetbrainsLauncherExtension(Extension):
 
         version = max(versions)
         projects = RecentProjectsParser.parse(
-            os.path.join(os.path.expanduser(base_path),
-                         f"{ide_data.config_prefix}{version.major}.{version.minor}",
+            os.path.join(base_path, f"{ide_data.config_prefix}{version.major}.{version.minor}",
                          "options", "recentProjects.xml"),
             ide_key
         )
