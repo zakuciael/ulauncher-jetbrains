@@ -32,8 +32,9 @@ class JetbrainsLauncherExtension(Extension):
         "webstorm": IdeData(name="WebStorm", config_prefix="WebStorm",
                             launcher_prefixes=["webstorm"]),
         "goland": IdeData(name="GoLand", config_prefix="GoLand", launcher_prefixes=["goland"]),
-        "datagrip": IdeData(name="DataGrip", config_prefix="DataGrip", launcher_prefixes=["datagrip"]),
-       
+        "datagrip": IdeData(name="DataGrip", config_prefix="DataGrip",
+                            launcher_prefixes=["datagrip"]),
+
     }
 
     aliases: Dict[str, IdeKey] = {}
