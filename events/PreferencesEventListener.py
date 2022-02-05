@@ -19,5 +19,8 @@ class PreferencesEventListener(EventListener):
         :param extension: Extension class
         """
 
+        if "studio_config_path" not in event.preferences:
+            event.preferences["studio_config_path"] = "~/.config/Google"
+
         extension.preferences.update(event.preferences)
         extension.parse_aliases(event.preferences.get("custom_aliases"))

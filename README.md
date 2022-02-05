@@ -73,6 +73,8 @@ To install this extension:
 - Rider
 - GoLand
 - DataGrip
+- RubyMine
+- Android Studio
 
 To use this extension first **generate shell scripts** in the JetBrains Toolbox app by doing the
 following:

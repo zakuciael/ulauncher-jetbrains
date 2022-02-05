@@ -30,11 +30,18 @@
       "default_value": "~/.config/JetBrains"
     },
     {
+      "id": "studio_config_path",
+      "type": "input",
+      "name": "Android Studio config location",
+      "description": "Path to the config location where the Android Studio IDE sores its configuration.",
+      "default_value": "~/.config/Google"
+    },
+    {
       "id": "custom_aliases",
       "type": "text",
       "name": "Custom aliases",
       "description": "Custom aliases for the IDEs. Example format: web: webstorm; php: phpstorm;",
-      "default_value": "intellij: idea; php: phpstorm; py: pycharm; web: webstorm; go: goland; grip: datagrip;"
+      "default_value": "intellij: idea; php: phpstorm; py: pycharm; web: webstorm; go: goland; grip: datagrip; ruby: rubymine; studio: android-studio; android: android-studio;"
     }
   ]
 }
