@@ -9,6 +9,11 @@ from xml.etree import ElementTree
 from data.IdeKey import IdeKey
 from data.IdeProject import IdeProject
 
+TIMESTAMP_XML_PATH = 'value/RecentProjectMetaInfo/option[@name="projectOpenTimestamp"]'
+RECENT_PROJECTS_MANAGER_PATH = './/component[@name="RecentProjectsManager"][1]'
+RECENT_DIRECTORY_PROJECTS_MANAGER_PATH = \
+    './/component[@name="RecentDirectoryProjectsManager"][1]'
+
 
 # pylint: disable=too-few-public-methods
 class RecentProjectsParser:
@@ -27,22 +32,23 @@ class RecentProjectsParser:
             return []
 
         root = ElementTree.parse(file_path).getroot()
-        recent_projects_manager_path = './/component[@name="RecentProjectsManager"][1]'
-        recent_directory_projects_manager_path = \
-            './/component[@name="RecentDirectoryProjectsManager"][1]'
 
         raw_projects = \
             root.findall(
-                f'{recent_projects_manager_path}/option[@name="recentPaths"]/list/option'
+                f'{RECENT_PROJECTS_MANAGER_PATH}/option[@name="recentPaths"]/list/option'
             ) + \
             root.findall(
-                f'{recent_directory_projects_manager_path}/option[@name="recentPaths"]/list/option'
+                f'{RECENT_DIRECTORY_PROJECTS_MANAGER_PATH}/option[@name="recentPaths"]/list/option'
             ) + \
             root.findall(
-                f'{recent_projects_manager_path}/option[@name="additionalInfo"]/map/entry'
+                f'{RECENT_PROJECTS_MANAGER_PATH}/option[@name="additionalInfo"]/map/entry'
             ) + \
             root.findall(
-                f'{recent_directory_projects_manager_path}/option[@name="additionalInfo"]/map/entry'
+                f'{RECENT_DIRECTORY_PROJECTS_MANAGER_PATH}/option[@name="additionalInfo"]/map/entry'
+            ) + \
+            root.findall(
+                f'{RECENT_PROJECTS_MANAGER_PATH}/option[@name="groups"]/list/ProjectGroup/' +
+                'option[@name="projects"]/list/option'
             )
         project_paths = list(OrderedDict.fromkeys([
             (project.attrib['value' if 'value' in project.attrib else 'key']).replace(
