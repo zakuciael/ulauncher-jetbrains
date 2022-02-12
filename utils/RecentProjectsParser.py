@@ -12,14 +12,38 @@ from data.IdeProject import IdeProject
 EntryData = TypedDict("EntryData", {"path": str, "timestamp": Optional[int]})
 
 TIMESTAMP_XML_PATH = 'value/RecentProjectMetaInfo/option[@name="projectOpenTimestamp"]'
-RECENT_PROJECTS_MANAGER_PATH = './/component[@name="RecentProjectsManager"][1]'
-RECENT_DIRECTORY_PROJECTS_MANAGER_PATH = \
-    './/component[@name="RecentDirectoryProjectsManager"][1]'
 
 
 # pylint: disable=too-few-public-methods
 class RecentProjectsParser:
     """ Parser for JetBrains IDEs "Recent projects" files """
+
+    @staticmethod
+    def scan_paths(root: Element) -> List[Element]:
+        """
+        Find all elements from paths
+        :param root: Root element of the XML file
+        :return: Found elements
+        """
+
+        raw_projects = []
+        paths = [
+            './/component[@name="RecentProjectsManager"][1]',
+            './/component[@name="RecentDirectoryProjectsManager"][1]',
+            './/component[@name="RiderRecentProjectsManager"][1]',
+            './/component[@name="RiderRecentDirectoryProjectsManager"][1]'
+        ]
+
+        for path in paths:
+            raw_projects += \
+                root.findall(f'{path}/option[@name="recentPaths"]/list/option') + \
+                root.findall(f'{path}/option[@name="additionalInfo"]/map/entry') + \
+                root.findall(
+                    f'{path}/option[@name="groups"]/list/ProjectGroup/' +
+                    'option[@name="projects"]/list/option'
+                )
+
+        return raw_projects
 
     @staticmethod
     def parse(file_path: str, ide_key: IdeKey) -> List[IdeProject]:
@@ -34,24 +58,7 @@ class RecentProjectsParser:
             return []
 
         root = ElementTree.parse(file_path).getroot()
-
-        raw_projects = \
-            root.findall(
-                f'{RECENT_PROJECTS_MANAGER_PATH}/option[@name="recentPaths"]/list/option'
-            ) + \
-            root.findall(
-                f'{RECENT_DIRECTORY_PROJECTS_MANAGER_PATH}/option[@name="recentPaths"]/list/option'
-            ) + \
-            root.findall(
-                f'{RECENT_PROJECTS_MANAGER_PATH}/option[@name="additionalInfo"]/map/entry'
-            ) + \
-            root.findall(
-                f'{RECENT_DIRECTORY_PROJECTS_MANAGER_PATH}/option[@name="additionalInfo"]/map/entry'
-            ) + \
-            root.findall(
-                f'{RECENT_PROJECTS_MANAGER_PATH}/option[@name="groups"]/list/ProjectGroup/' +
-                'option[@name="projects"]/list/option'
-            )
+        raw_projects = RecentProjectsParser.scan_paths(root)
 
         projects: List[EntryData] = [
             cast(
