@@ -25,7 +25,8 @@ class ProjectsList:
         self._limit = limit
         self._items = SortedCollection(
             key=lambda item:
-            -item.timestamp if not self._query else item.score
+            (-item.timestamp if item.timestamp is not None else 0)
+            if not self._query else item.score
         )
 
     def __len__(self) -> int:
