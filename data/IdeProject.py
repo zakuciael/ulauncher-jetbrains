@@ -10,15 +10,18 @@ class IdeProject:
     name: str
     ide: IdeKey
     path: str
-    score: int
+    timestamp: int | None
     icon: str | None
+    score: int
 
     # pylint: disable=too-many-arguments
-    def __init__(self, name: str, ide: IdeKey, path: str, score: int,
-                 icon: str | None = None) -> None:
+    def __init__(self, name: str, ide: IdeKey, path: str,
+                 timestamp: int | None, icon: str | None = None) -> None:
         super().__init__()
-        self.icon = icon
-        self.score = score
-        self.path = path
-        self.ide = ide
+
         self.name = name
+        self.ide = ide
+        self.path = path
+        self.timestamp = timestamp
+        self.icon = icon
+        self.score = 0

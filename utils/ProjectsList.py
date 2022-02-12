@@ -23,7 +23,11 @@ class ProjectsList:
         self._query = query.lower().strip()
         self._min_score = min_score
         self._limit = limit
-        self._items = SortedCollection(key=lambda item: item.score)
+        self._items = SortedCollection(
+            key=lambda item:
+            (-item.timestamp if item.timestamp is not None else 0)
+            if not self._query else item.score
+        )
 
     def __len__(self) -> int:
         return len(self._items)
@@ -60,13 +64,19 @@ class ProjectsList:
         name = item.name
         path = item.path.replace(r"^~", "")
 
-        score = max(get_score(self._query, name), get_score(self._query, path))
-
-        if score >= self._min_score:
-            # use negative to sort by score in desc. order
-            item.score = -score
-
+        if not self._query:
             self._items.insert(item)
+
             while len(self._items) > self._limit:
-                # remove items with the lowest score to maintain limited number of items
                 self._items.pop()
+        else:
+            score = max(get_score(self._query, name), get_score(self._query, path))
+
+            if score >= self._min_score:
+                # use negative to sort by score in desc. order
+                item.score = -score
+
+                self._items.insert(item)
+                while len(self._items) > self._limit:
+                    # remove items with the lowest score to maintain limited number of items
+                    self._items.pop()
