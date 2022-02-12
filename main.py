@@ -140,11 +140,22 @@ class JetbrainsLauncherExtension(Extension):
             return []
 
         version = max(versions)
+        config_dir = os.path.join(
+            base_path,
+            f"{ide_data.config_prefix}{version.major}.{version.minor}",
+            "options"
+        )
+
         projects = RecentProjectsParser.parse(
-            os.path.join(base_path, f"{ide_data.config_prefix}{version.major}.{version.minor}",
-                         "options", "recentProjects.xml"),
+            os.path.join(config_dir, "recentProjects.xml"),
             ide_key
         )
+
+        if ide_key == "rider":
+            projects += RecentProjectsParser.parse(
+                os.path.join(config_dir, "recentSolutions.xml"),
+                ide_key
+            )
 
         return projects
 
