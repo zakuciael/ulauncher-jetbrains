@@ -22,5 +22,8 @@ class PreferencesEventListener(EventListener):
         if "studio_config_path" not in event.preferences:
             event.preferences["studio_config_path"] = "~/.config/Google"
 
+        if "sort_by" not in event.preferences:
+            event.preferences["sort_by"] = "none"
+
         extension.preferences.update(event.preferences)
         extension.parse_aliases(event.preferences.get("custom_aliases"))

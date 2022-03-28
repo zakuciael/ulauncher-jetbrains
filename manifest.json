@@ -42,6 +42,31 @@
       "name": "Custom aliases",
       "description": "Custom aliases for the IDEs. Example format: web: webstorm; php: phpstorm;",
       "default_value": "intellij: idea; php: phpstorm; py: pycharm; web: webstorm; go: goland; grip: datagrip; ruby: rubymine; studio: android-studio; android: android-studio;"
+    },
+    {
+      "id": "sort_by",
+      "type": "select",
+      "name": "Sort by",
+      "description": "Changes how the query results are sorted",
+      "default_value": "none",
+      "options": [
+        {
+          "value": "none",
+          "text": "No sorting"
+        },
+        {
+          "value": "recent",
+          "text": "Recent project"
+        },
+        {
+          "value": "ascending",
+          "text": "Name [Ascending]"
+        },
+        {
+          "value": "descending",
+          "text": "Name [Descending]"
+        }
+      ]
     }
   ]
 }

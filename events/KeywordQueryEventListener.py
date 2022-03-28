@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import os
 import re
-from typing import cast
+from typing import cast, List
 
 from typing_extensions import TYPE_CHECKING
 from ulauncher.api.client.EventListener import EventListener
@@ -15,6 +15,7 @@ from ulauncher.api.shared.event import KeywordQueryEvent
 from ulauncher.api.shared.item.ExtensionResultItem import ExtensionResultItem
 
 from data.IdeKey import IdeKey
+from data.IdeProject import IdeProject
 from utils.ProjectsList import ProjectsList
 
 if TYPE_CHECKING:
@@ -78,7 +79,8 @@ class KeywordQueryEventListener(EventListener):
                 ide_key=ide_key
             )
 
-        for project in projects:
+        sort_by = extension.preferences.get("sort_by")
+        for project in self.sort_projects(list(projects), sort_by):
             results.append(
                 ExtensionResultItem(
                     icon=project.icon if project.icon is not None else
@@ -94,6 +96,30 @@ class KeywordQueryEventListener(EventListener):
             )
 
         return RenderResultListAction(results)
+
+    @staticmethod
+    def sort_projects(projects: List[IdeProject], sort_by: str) -> List[IdeProject]:
+        """
+        Sorts list of projects by a given sorting mode
+        :param projects: List of projects to sort
+        :param sort_by: Sorting mode
+        :return List[IdeProject] Sorted projects
+        """
+
+        if sort_by == "recent":
+            return sorted(
+                projects,
+                key=lambda item: -item.timestamp if item.timestamp is not None else 0
+            )
+
+        if sort_by in ("ascending", "descending"):
+            return sorted(
+                projects,
+                key=lambda item: item.name,
+                reverse=sort_by == "descending"
+            )
+
+        return list(projects)
 
     @staticmethod
     def make_error(extension: 'JetbrainsLauncherExtension', title: str,
