@@ -24,7 +24,7 @@ class JetbrainsLauncherExtension(Extension):
         "clion": IdeData(name="CLion", config_prefix="CLion", launcher_prefixes=["clion"]),
         "idea": IdeData(name="IntelliJ IDEA", config_prefix="IntelliJIdea",
                         launcher_prefixes=["idea"]),
-        "phpstorm": IdeData(name="PHPStorm", config_prefix="PHPStorm",
+        "phpstorm": IdeData(name="PHPStorm", config_prefix="PhpStorm",
                             launcher_prefixes=["phpstorm"]),
         "pycharm": IdeData(name="PyCharm", config_prefix="PyCharm",
                            launcher_prefixes=["pycharm", "charm"]),
