@@ -138,7 +138,7 @@ class KeywordQueryEventListener(EventListener):
                 icon=extension.get_ide_icon(ide_key) \
                     if ide_key is not None else extension.get_base_icon(),
                 name=title,
-                description=desc,
+                description=desc if desc is not None else "",
                 on_enter=HideWindowAction()
             )
         ])
