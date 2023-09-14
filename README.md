@@ -114,13 +114,16 @@ The output will display something like this:
 ```
 
 In another terminal run `make PORT=<PORT> start` command to run the extension backend.
-> Note: The ``<PORT>`` variable refers to the port number found in the ``ULAUNCHER_WS_API`` env located in the above log.
+> Note: The ``<PORT>`` variable refers to the port number found in the ``ULAUNCHER_WS_API`` env located in the above
+> log.
 
 To see your changes, CTRL+C the previous command and run it again to refresh.
 
 ## Credits
 
-[Bruno Paz](https://github.com/brpaz) - Original author
+- [Bruno Paz](https://github.com/brpaz) - Original author
+- [Vince](https://github.com/vinceliuice) - Author of the [icons](https://github.com/vinceliuice/WhiteSur-icon-theme)
+  used by the extension
 
 ## License
 
