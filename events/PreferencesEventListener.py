@@ -25,5 +25,10 @@ class PreferencesEventListener(EventListener):
         if "sort_by" not in event.preferences:
             event.preferences["sort_by"] = "none"
 
+        aliases = extension.parse_aliases(event.preferences.get("custom_aliases"))
+
+        if not any((ide_key for ide_key in aliases.values() if ide_key == "rustrover")):
+            aliases["rust"] = "rustrover"
+
         extension.preferences.update(event.preferences)
-        extension.parse_aliases(event.preferences.get("custom_aliases"))
+        extension.set_aliases(aliases)

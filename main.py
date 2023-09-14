@@ -38,7 +38,8 @@ class JetbrainsLauncherExtension(Extension):
                             launcher_prefixes=["rubymine"]),
         "android-studio": IdeData(name="Android Studio", config_prefix="AndroidStudio",
                                   launcher_prefixes=["studio"],
-                                  custom_config_key="studio_config_path")
+                                  custom_config_key="studio_config_path"),
+        "rustrover": IdeData(name="RustRover", config_prefix="RustRover", launcher_prefixes=["rustrover"])
     }
 
     aliases: Dict[str, IdeKey] = {}
@@ -63,7 +64,7 @@ class JetbrainsLauncherExtension(Extension):
 
         return path
 
-    def parse_aliases(self, raw_aliases: str) -> None:
+    def parse_aliases(self, raw_aliases: str) -> Dict[str, IdeKey] | None:
         """
         Parses raw aliases list into a python list
         :param raw_aliases: Raw aliases list
@@ -73,15 +74,30 @@ class JetbrainsLauncherExtension(Extension):
             return
 
         matches = re.findall(r"(\w+):(?: +|)([\w-]+)*;", raw_aliases)
+        aliases = {}
 
         for alias, ide_key in matches:
             if self.check_ide_key(ide_key):
-                self.aliases[alias] = cast(IdeKey, ide_key)
-                self.logger.info("Loaded alias: %s -> %s", ide_key, alias)
+                aliases[alias] = cast(IdeKey, ide_key)
             else:
                 self.logger.warning(
                     "Invalid ide key specified for alias %s. Expected one of %s",
                     alias, ", ".join(self.ides.keys()))
+
+        return aliases
+
+    def set_aliases(self, aliases: Dict[str, IdeKey]) -> None:
+        """
+        Sets aliases used by the extension
+        :param aliases: Aliases to set
+        """
+
+        if aliases is None:
+            return
+
+        for alias, ide_key in aliases.items():
+            self.aliases[alias] = ide_key
+            self.logger.info("Loaded alias: %s -> %s", ide_key, alias)
 
     def check_ide_key(self, key: str) -> bool:
         """

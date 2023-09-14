@@ -12,5 +12,6 @@ IdeKey = Literal[
     "goland",
     "datagrip",
     "rubymine",
-    "android-studio"
+    "android-studio",
+    "rustrover"
 ]

@@ -22,4 +22,4 @@ class PreferencesUpdateEventListener(EventListener):
 
         extension.preferences[event.id] = event.new_value
         if event.id == "custom_aliases":
-            extension.parse_aliases(event.new_value)
+            extension.set_aliases(extension.parse_aliases(event.new_value))
