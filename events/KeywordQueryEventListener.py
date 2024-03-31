@@ -3,9 +3,8 @@ from __future__ import annotations
 
 import os
 import re
-from typing import cast, List
+from typing import cast, List, TYPE_CHECKING
 
-from typing_extensions import TYPE_CHECKING
 from ulauncher.api.client.EventListener import EventListener
 from ulauncher.api.shared.action.CopyToClipboardAction import CopyToClipboardAction
 from ulauncher.api.shared.action.HideWindowAction import HideWindowAction
