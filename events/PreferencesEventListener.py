@@ -1,6 +1,6 @@
 """ Contains class for handling initial preference event from Ulauncher"""
 
-from typing_extensions import TYPE_CHECKING
+from typing import TYPE_CHECKING
 from ulauncher.api.client.EventListener import EventListener
 from ulauncher.api.shared.event import PreferencesEvent
 
