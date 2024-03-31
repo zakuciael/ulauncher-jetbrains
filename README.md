@@ -49,7 +49,7 @@ IDEs and better preferences settings.
 - Python 3
 - Jetbrains IDE
 
-#### Packages
+#### Python Packages
 
 - semver >=2.13.0
 
