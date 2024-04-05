@@ -21,25 +21,26 @@ from utils.RecentProjectsParser import RecentProjectsParser
 class JetbrainsLauncherExtension(Extension):
     """ Main Extension Class  """
     ides: Dict[IdeKey, IdeData] = {
-        "clion": IdeData(name="CLion", config_prefix="CLion", launcher_prefixes=["clion"]),
-        "idea": IdeData(name="IntelliJ IDEA", config_prefix="IntelliJIdea",
+        "clion": IdeData(name="CLion", config_prefixes=["CLion"], launcher_prefixes=["clion"]),
+        "idea": IdeData(name="IntelliJ IDEA", config_prefixes=["IntelliJIdea", "IdeaIC"],
                         launcher_prefixes=["idea"]),
-        "phpstorm": IdeData(name="PHPStorm", config_prefix="PhpStorm",
+        "phpstorm": IdeData(name="PHPStorm", config_prefixes=["PhpStorm"],
                             launcher_prefixes=["phpstorm", "pstorm"]),
-        "pycharm": IdeData(name="PyCharm", config_prefix="PyCharm",
+        "pycharm": IdeData(name="PyCharm", config_prefixes=["PyCharm"],
                            launcher_prefixes=["pycharm", "charm"]),
-        "rider": IdeData(name="Rider", config_prefix="Rider", launcher_prefixes=["rider"]),
-        "webstorm": IdeData(name="WebStorm", config_prefix="WebStorm",
+        "rider": IdeData(name="Rider", config_prefixes=["Rider"], launcher_prefixes=["rider"],
+                         recent_projects_file="recentSolutions.xml"),
+        "webstorm": IdeData(name="WebStorm", config_prefixes=["WebStorm"],
                             launcher_prefixes=["webstorm"]),
-        "goland": IdeData(name="GoLand", config_prefix="GoLand", launcher_prefixes=["goland"]),
-        "datagrip": IdeData(name="DataGrip", config_prefix="DataGrip",
+        "goland": IdeData(name="GoLand", config_prefixes=["GoLand"], launcher_prefixes=["goland"]),
+        "datagrip": IdeData(name="DataGrip", config_prefixes=["DataGrip"],
                             launcher_prefixes=["datagrip"]),
-        "rubymine": IdeData(name="RubyMine", config_prefix="RubyMine",
+        "rubymine": IdeData(name="RubyMine", config_prefixes=["RubyMine"],
                             launcher_prefixes=["rubymine"]),
-        "android-studio": IdeData(name="Android Studio", config_prefix="AndroidStudio",
+        "android-studio": IdeData(name="Android Studio", config_prefixes=["AndroidStudio"],
                                   launcher_prefixes=["studio"],
                                   custom_config_key="studio_config_path"),
-        "rustrover": IdeData(name="RustRover", config_prefix="RustRover", launcher_prefixes=["rustrover"])
+        "rustrover": IdeData(name="RustRover", config_prefixes=["RustRover"], launcher_prefixes=["rustrover"])
     }
 
     aliases: Dict[str, IdeKey] = {}
@@ -138,40 +139,36 @@ class JetbrainsLauncherExtension(Extension):
         if base_path is None or not os.path.isdir(base_path):
             raise FileNotFoundError("Cant find configs directory")
 
-        versions: list[semver.VersionInfo] = []
+        versions: Dict[str, semver.VersionInfo] = {}
         for path in os.listdir(base_path):
-            match = re.match(
-                f"^{ide_data.config_prefix}" +
-                r"(?P<major>0|[1-9]\d*)(\.(?P<minor>0|[1-9]\d*)(\.(?P<patch>0|[1-9]\d*))?)?",
-                path)
+            if os.path.exists(os.path.join(base_path, path, "options", ide_data.recent_projects_file)):
+                for config_prefix in ide_data.config_prefixes:
+                    match = re.match(
+                        f"^{config_prefix}" +
+                        r"(?P<major>0|[1-9]\d*)(\.(?P<minor>0|[1-9]\d*)(\.(?P<patch>0|[1-9]\d*))?)?",
+                        path)
 
-            if match is not None:
-                version_dict = {
-                    key: 0 if value is None else value for key, value in match.groupdict().items()
-                }
+                    if match is not None:
+                        version_dict = {
+                            key: 0 if value is None else value for key, value in match.groupdict().items()
+                        }
 
-                versions.append(semver.VersionInfo(**version_dict))
+                        versions[path] = semver.VersionInfo(**version_dict)
 
         if len(versions) == 0:
             return []
 
-        version = max(versions)
+        version = max(versions, key=versions.get)
         config_dir = os.path.join(
             base_path,
-            f"{ide_data.config_prefix}{version.major}.{version.minor}",
+            version,
             "options"
         )
 
         projects = RecentProjectsParser.parse(
-            os.path.join(config_dir, "recentProjects.xml"),
+            os.path.join(config_dir, ide_data.recent_projects_file),
             ide_key
         )
-
-        if ide_key == "rider":
-            projects += RecentProjectsParser.parse(
-                os.path.join(config_dir, "recentSolutions.xml"),
-                ide_key
-            )
 
         return projects
 
