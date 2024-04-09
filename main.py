@@ -26,7 +26,7 @@ class JetbrainsLauncherExtension(Extension):
                         launcher_prefixes=["idea"]),
         "phpstorm": IdeData(name="PHPStorm", config_prefixes=["PhpStorm"],
                             launcher_prefixes=["phpstorm", "pstorm"]),
-        "pycharm": IdeData(name="PyCharm", config_prefixes=["PyCharm"],
+        "pycharm": IdeData(name="PyCharm", config_prefixes=["PyCharm", "PyCharmCE"],
                            launcher_prefixes=["pycharm", "charm"]),
         "rider": IdeData(name="Rider", config_prefixes=["Rider"], launcher_prefixes=["rider"],
                          recent_projects_file="recentSolutions.xml"),
