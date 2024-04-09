@@ -158,10 +158,10 @@ class JetbrainsLauncherExtension(Extension):
         if len(versions) == 0:
             return []
 
-        version = max(versions, key=versions.get)
+        directory = max(versions, key=versions.get)
         config_dir = os.path.join(
             base_path,
-            version,
+            directory,
             "options"
         )
 
