@@ -1,8 +1,8 @@
 """ Contains custom implementation of SortedList found in Ulauncher's code """
 from typing import Iterator, List
 
-from ulauncher.utils.SortedCollection import SortedCollection  # type: ignore
-from ulauncher.utils.fuzzy_search import get_score  # type: ignore
+from utils.SortedCollection import SortedCollection  # type: ignore
+from utils.fuzzy_search import get_score  # type: ignore
 
 from data.IdeProject import IdeProject
 
